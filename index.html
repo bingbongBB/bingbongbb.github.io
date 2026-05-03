@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nicole Kuo — AI · Software · QA Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: #fff; color: #21243D; font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+  /* Scroll progress bar */
+  #scroll-progress {
+    position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
+    background: linear-gradient(90deg, #789DBC, #C9E9D2);
+    width: 0%; transition: width 0.1s linear;
+  }
+
+  /* Fade-in animation — only for below-the-fold elements */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* Hero elements animate in on load — not IntersectionObserver */
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-in {
+    animation: heroFadeUp 0.7s cubic-bezier(.22,1,.36,1) both;
+  }
+  .hero-in-1 { animation-delay: 0.05s; }
+  .hero-in-2 { animation-delay: 0.15s; }
+  .hero-in-3 { animation-delay: 0.25s; }
+  .hero-in-4 { animation-delay: 0.38s; }
+  .hero-in-5 { animation-delay: 0.50s; }
+
+  /* Cursor blink */
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+  .cursor { display: inline-block; width: 3px; height: 0.85em; background: #789DBC; margin-left: 4px; vertical-align: middle; animation: blink 1s step-end infinite; border-radius: 2px; }
+
+  /* Tag pill */
+  .tag {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
+    background: rgba(33,36,61,0.07);
+    color: #21243D;
+    margin: 4px 5px 4px 0;
+    transition: background 0.2s, color 0.2s;
+  }
+  .tag.dark { background: #21243D; color: #fff; }
+
+  /* Nav button base */
+  .nav-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 15px; font-weight: 500; color: #21243D;
+    padding: 0; transition: color 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .nav-btn:hover { color: #789DBC; }
+
+  /* Card hover */
+  .featured-card {
+    background: #fff; border-radius: 8px; padding: 34px;
+    cursor: pointer; flex: 1 1 360px;
+    box-shadow: 0 2px 12px rgba(33,36,61,0.08);
+    transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow 0.25s;
+  }
+  .featured-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 48px rgba(33,36,61,0.15);
+  }
+
+  .exp-row {
+    display: flex; gap: 28px; padding: 28px 0;
+    border-bottom: 1px solid rgba(33,36,61,0.08);
+    cursor: pointer; transition: background 0.2s;
+    border-radius: 6px;
+  }
+  .exp-row:hover { background: rgba(33,36,61,0.025); }
+
+  .proj-row {
+    display: flex; gap: 28px; align-items: flex-start;
+    padding: 28px 0; cursor: pointer; transition: background 0.2s;
+    border-radius: 6px;
+  }
+  .proj-row:hover { background: rgba(33,36,61,0.025); }
+
+  /* Skill dot */
+  .skill-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #C9E9D2; flex-shrink: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .skill-item:hover .skill-dot { background: #789DBC; transform: scale(1.5); }
+
+  /* Hero gradient blob */
+  .hero-blob {
+    position: absolute; border-radius: 50%; filter: blur(72px);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* Modal backdrop */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(33,36,61,0.5);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal-box {
+    background: #fff; border-radius: 18px;
+    padding: 44px 40px;
+    max-width: 680px; width: 100%;
+    max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 32px 80px rgba(33,36,61,0.24);
+    position: relative;
+    animation: slideUp 0.28s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(33,36,61,0.15); border-radius: 3px; }
+
+  /* CTA buttons */
+  .cta-primary {
+    padding: 15px 36px; border-radius: 5px; border: none;
+    background: #789DBC; color: #fff;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(120,157,188,0.3);
+  }
+  .cta-primary:hover { background: #6a8aab; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(120,157,188,0.4); }
+
+  .cta-outline {
+    padding: 15px 36px; border-radius: 5px;
+    border: 2px solid #21243D;
+    background: transparent; color: #21243D;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .cta-outline:hover { background: #21243D; color: #fff; }
+
+  .resume-btn {
+    padding: 9px 22px; border-radius: 5px;
+    background: #789DBC; color: #fff;
+    text-decoration: none; font-size: 14px; font-weight: 700;
+    transition: background 0.2s, transform 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .resume-btn:hover { background: #6a8aab; transform: translateY(-1px); }
+
+  .social-link {
+    font-size: 14.5px; color: #8695A4; font-weight: 500;
+    text-decoration: none; transition: color 0.2s;
+  }
+  .social-link:hover { color: #21243D; }
+
+  .contact-btn {
+    padding: 15px 36px; border-radius: 5px;
+    font-size: 15px; font-weight: 700;
+    display: inline-block; transition: all 0.2s;
+    text-decoration: none; font-family: 'DM Sans', sans-serif;
+  }
+
+  /* Avatar ring animation */
+  @keyframes rotate-ring { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .avatar-ring {
+    position: absolute; inset: -6px; border-radius: 50%;
+    border: 2px dashed rgba(120,157,188,0.35);
+    animation: rotate-ring 18s linear infinite;
+  }
+
+  /* Section label */
+  .sec-label {
+    font-size: 13px; font-weight: 700; color: #789DBC;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .sec-title {
+    font-size: 42px; font-weight: 900; color: #21243D;
+    letter-spacing: 0; margin-bottom: 28px;
+    line-height: 1.1;
+  }
+
+  @media (max-width: 900px) {
+    .hero-inner { flex-direction: column-reverse !important; text-align: center; gap: 32px !important; }
+    .hero-avatar { width: 240px !important; height: 240px !important; margin: 0 auto; }
+    /* Scale inner circles proportionally on mobile */
+    .hero-avatar > div:first-child { width: 220px !important; height: 220px !important; }
+    .hero-avatar > div:last-child  { width: 220px !important; height: 220px !important; }
+    .hero-cta, .hero-social { justify-content: center !important; }
+    .nav-links { display: none !important; }
+    .sec-inner { padding: 0 24px !important; }
+    .hero-name { font-size: 44px !important; }
+    .sec-title { font-size: 30px !important; }
+    .sec-title + p { display: none; }
+    footer { padding: 24px !important; flex-direction: column !important; gap: 12px; }
+    .footer-links { display: none !important; }
+    .featured-card { flex: 1 1 100% !important; }
+    .exp-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// ─── Tokens ───────────────────────────────────────────────────────────────────
+const C = {
+  navy:     "#21243D",
+  gray:     "#8695A4",
+  mint:     "#C9E9D2",
+  pink:     "#FFE3E3",
+  blue:     "#789DBC",
+  white:    "#FFFFFF",
+  offWhite: "#F9FAFB",
+};
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+const PROFILE = {
+  name:     "Nicole Kuo",
+  fullName: "Yu Yi (Nicole) Kuo",
+  greeting: "Hi, I'm",
+  titles:   ["AI Engineer", "Software Engineer", "QA Engineer"],
+  bio:      "CS graduate student at Ohio State, passionate about building AI-powered systems, automated testing pipelines, and full-stack applications. From RAG-based LLM systems to mixed-reality diagnostics — I love tackling problems that sit at the edge of research and engineering.",
+  location: "Columbus, OH",
+  email:    "kuo.382@osu.edu",
+  phone:    "(614) 290-4499",
+  github:   "https://github.com/bingbongBB",
+  linkedin: "https://linkedin.com/in/yuyikuo",
+  avatar:   "IMG_2038.JPG?v=20260428-1954",
+};
+
+const EDUCATION = [
+  {
+    school:  "The Ohio State University",
+    degree:  "M.S. Computer Science and Engineering",
+    period:  "Aug 2024 – May 2026 (Expected)",
+    location:"Columbus, OH",
+    courses: ["Machine Learning", "Natural Language Processing", "Parallel Computing", "Data Mining", "Computer Architecture"],
+    emoji:   "🎓",
+  },
+  {
+    school:  "National Ilan University",
+    degree:  "B.E. Computer Science & Information Engineering",
+    period:  "Sep 2020 – Jun 2024",
+    location:"Yilan, Taiwan",
+    courses: ["Data Structure", "Algorithms", "Operating Systems", "Software Engineering", "Data Science"],
+    emoji:   "📚",
+  },
+];
+
+const SKILLS = {
+  "Languages":  ["Python", "JavaScript", "Go", "SQL", "Bash"],
+  "AI / ML":    ["PyTorch", "TensorFlow", "RAG", "Prompt Engineering", "OpenCV", "Milvus (Vector DB)", "Faiss"],
+  "Databases":  ["MongoDB", "MySQL"],
+  "QA & Tools": ["Pytest", "Postman", "Jira", "WebSocket", "REST APIs"],
+  "DevOps":     ["Docker", "Jenkins", "Git / GitLab", "CI/CD"],
+};
+
+const EXPERIENCE = [
+  {
+    id: "exp1", role: "AI Intern", company: "NUWA Robotics",
+    period: "May 2025 – Jun. 2025", location: "Taipei, Taiwan",
+    emoji: "🤖", color: C.mint,
+    bullets: [
+      "Cut memory consumption by up to 80% by implementing and benchmarking hybrid RAG systems using Milvus and BGE-M3 embeddings across multiple LLM variants",
+      "Raised natural-language-to-MongoDB query accuracy by 13% via Chain of Thought prompt engineering and containerized evaluation workflows",
+      "Systematized cross-model evaluation with automated testing pipelines across QWen2 and Llama 3.2 using semantic similarity and generation-efficiency metrics",
+    ],
+    tags: ["Python", "RAG", "Milvus", "LLM", "Docker"],
+  },
+  {
+    id: "exp2", role: "Auto Quality Assurance Intern", company: "BTSE",
+    period: "Jan. 2024 – Jul. 2024", location: "Taipei, Taiwan",
+    emoji: "🧪", color: C.pink,
+    bullets: [
+      "Expanded automated test coverage by 56% and reduced execution time by 43% by developing a Python/Pytest framework for cryptocurrency futures and spot market workflows",
+      "Streamlined feature deployment by 58% by integrating Postman API checks and WebSocket market-data tests into Jenkins CI/CD and GitLab pipelines",
+      "Shortened defect resolution time by 27% by formalizing Jira-based QA triage workflows across a 10+ member team",
+    ],
+    tags: ["Pytest", "Python", "Postman", "WebSocket", "Jenkins", "CI/CD"],
+  },
+  {
+    id: "exp3", role: "Software Engineer Intern", company: "Neten Digital Consultant",
+    period: "Jul. 2023 – Sep. 2023", location: "Yilan, Taiwan",
+    emoji: "💻", color: "#E8E8F4",
+    bullets: [
+      "Boosted user engagement by 29% by developing a responsive venue-sharing platform with Vue.js and QR-code-based interactions",
+      "Accelerated user authentication by 20% by delivering 5 core features including multilingual support and validated auth flows",
+      "Enhanced cross-regional satisfaction by 16% and cut deployment time by 40% with a Go backend, Vuetify frontend, and containerized deployment",
+    ],
+    tags: ["Vue.js", "Go", "MySQL", "Docker", "Vuetify"],
+  },
+];
+
+const FEATURED = [
+  {
+    id: "f1", title: "Motion Replacement for Video-Based rPPG",
+    subtitle: "ML Research · Apr 2026",
+    tags: ["Python", "PyTorch", "OpenCV", "rPPG", "Video Processing"],
+    color: C.mint, emoji: "🫀",
+    description: "A 2-stage video preprocessing pipeline for remote physiological measurement (rPPG) that significantly reduces heart-rate estimation error in motion-heavy scenarios by replacing high-motion facial frames with lower-motion equivalents.",
+    highlights: [
+      "Reduced heart-rate estimation error by up to 44.92% in motion-heavy scenarios",
+      "Improved robustness across 3 supervised backbones (PhysNet, EfficientPhys, etc.)",
+      "Converted 256×256 high-motion videos using frame-by-frame motion replacement + temporal stabilization",
+      "Validated on 2 public datasets (VIPL-HR, MMPD) — MAE as low as 3.26 on VIPL-HR",
+    ],
+    github: "https://github.com/bingbongBB",
+    demo: null,
+  },
+  {
+    id: "f2", title: "AI Recommendation System for FDA Device Safety",
+    subtitle: "AI / NLP · Nov 2025",
+    tags: ["GPT-4", "MeSH", "MedCPT", "Python", "RAG"],
+    color: C.pink, emoji: "🏥",
+    description: "A recommendation pipeline for 640+ MAUDE FDA publications that uses GPT-4 to enrich MeSH terms and MedCPT cosine-similarity search to surface clinically comparable device safety cases — even under sparse metadata.",
+    highlights: [
+      "Built recommendation pipeline covering 640+ MAUDE publications",
+      "Used GPT-4 to enrich MeSH terms from titles and abstracts, reducing terminology mismatch",
+      "Enforced MeSH exact-match retrieval with MedCPT cosine-similarity fallback for coverage",
+      "Validated with 2 domain raters across 60 source papers and top-5 recommendations",
+    ],
+    github: "https://github.com/bingbongBB",
+    demo: null,
+  },
+];
+
+const PROJECTS = [
+  {
+    id: "p1", title: "Political Impersonation Detection",
+    subtitle: "Taiwanese Social Media Analysis · Apr 2025",
+    tags: ["LLM", "Gemini API", "Python", "NLP", "Few-Shot Prompting"],
+    emoji: "🕵️", year: "2025",
+    description: "Detected political trolling with 75% accuracy across 1000+ Taiwanese social media posts using a Gemini-powered pipeline with weighted feature analysis and exponential-backoff retry logic.",
+    highlights: [
+      "Achieved 75% detection accuracy across 1000+ social media posts",
+      "Raised detection precision from 32% to 80% via zero-shot, contextual, and few-shot prompting strategies",
+      "Built hybrid detection combining Gemini API prompting and weighted feature analysis",
+    ],
+    github: "https://github.com/bingbongBB",
+    demo: null,
+  },
+  {
+    id: "p2", title: "Breast Cancer Detection with Mixed Reality",
+    subtitle: "Computer Vision · Mar 2024",
+    tags: ["EfficientNetB7", "OpenCV", "HoloLens 2", "PyTorch", "CBIS-DDSM"],
+    emoji: "🔬", year: "2024",
+    description: "An assistive diagnostic system for mammography review using a CNN ensemble on CBIS-DDSM data, delivered through a hands-free mixed-reality interface on HoloLens 2.",
+    highlights: [
+      "Achieved 70% calcification classification accuracy with EfficientNetB7",
+      "Benchmarked 6 CNN backbones with histogram equalization and augmentation",
+      "Delivered 4 contour metrics via hands-free HoloLens 2 interface",
+    ],
+    github: "https://github.com/bingbongBB",
+    demo: null,
+  },
+];
+
+// ─── Hooks ────────────────────────────────────────────────────────────────────
+function useTypingEffect(words, speed = 80, pause = 1800) {
+  const [display, setDisplay] = useState("");
+  const [wIdx, setWIdx] = useState(0);
+  const [charIdx, setCharIdx] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const word = words[wIdx];
+    let timeout;
+    if (!deleting && charIdx < word.length) {
+      timeout = setTimeout(() => setCharIdx(c => c + 1), speed);
+    } else if (!deleting && charIdx === word.length) {
+      timeout = setTimeout(() => setDeleting(true), pause);
+    } else if (deleting && charIdx > 0) {
+      timeout = setTimeout(() => setCharIdx(c => c - 1), speed / 2);
+    } else if (deleting && charIdx === 0) {
+      setDeleting(false);
+      setWIdx(i => (i + 1) % words.length);
+    }
+    setDisplay(word.slice(0, charIdx));
+    return () => clearTimeout(timeout);
+  }, [charIdx, deleting, wIdx, words, speed, pause]);
+
+  return display;
+}
+
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    els.forEach(el => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+}
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+function Avatar() {
+  const [err, setErr] = useState(false);
+  return (
+    <div className="hero-avatar" style={{ position: "relative", width: 500, height: 500, flexShrink: 0 }}>
+      <div style={{ position: "absolute", bottom: 0, right: 0, width: 480, height: 480, borderRadius: "50%", background: C.mint }} />
+      <div style={{ position: "absolute", top: 0, left: 0, width: 480, height: 480, borderRadius: "50%", background: C.offWhite, border: `4px solid ${C.white}`, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 80, boxShadow: "0 16px 64px rgba(33,36,61,0.16)", position: "relative" }}>
+        <div className="avatar-ring"></div>
+        {!err
+          ? <img src={PROFILE.avatar} alt={PROFILE.name} onError={() => setErr(true)} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", borderRadius: "50%" }} />
+          : <span style={{ fontSize: 80 }}>👩‍💻</span>
+        }
+      </div>
+    </div>
+  );
+}
+
+function Tag({ label, dark }) {
+  return <span className={`tag${dark ? " dark" : ""}`}>{label}</span>;
+}
+
+function Modal({ item, onClose }) {
+  useEffect(() => {
+    const h = e => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", h);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", h); document.body.style.overflow = ""; };
+  }, [onClose]);
+
+  const bullets = item.bullets || item.highlights || [];
+  const tags = item.tags || [];
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal-box" onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} style={{ position: "absolute", top: 14, right: 14, background: "rgba(33,36,61,0.07)", border: "none", borderRadius: 8, width: 36, height: 36, cursor: "pointer", fontSize: 22, color: C.navy, lineHeight: 1, fontFamily: "'DM Sans',sans-serif" }}>×</button>
+        <div style={{ width: 68, height: 68, borderRadius: 14, background: item.color || C.offWhite, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, marginBottom: 18 }}>{item.emoji}</div>
+        <h2 style={{ margin: "0 0 3px", fontSize: 26, fontWeight: 800, color: C.navy, letterSpacing: "0" }}>{item.title || item.role}</h2>
+        {(item.subtitle || item.company) && <p style={{ margin: "0 0 5px", fontSize: 16, color: C.blue, fontWeight: 600 }}>{item.subtitle || item.company}</p>}
+        {item.period && <p style={{ margin: "0 0 18px", fontSize: 14.5, color: C.gray }}>{item.period}{item.location ? ` · ${item.location}` : ""}</p>}
+        <div style={{ marginBottom: 18 }}>{tags.map(t => <Tag key={t} label={t} />)}</div>
+        {item.description && <p style={{ fontSize: 16.5, color: C.navy, lineHeight: 1.65, margin: "0 0 22px", opacity: 0.86 }}>{item.description}</p>}
+        {bullets.length > 0 && (
+          <>
+            <h4 style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.08em" }}>{item.bullets ? "Achievements" : "Highlights"}</h4>
+            <ul style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+              {bullets.map((b, i) => <li key={i} style={{ fontSize: 15.5, color: C.navy, lineHeight: 1.65, opacity: 0.86 }}>{b}</li>)}
+            </ul>
+          </>
+        )}
+        <div style={{ display: "flex", gap: 12, marginTop: 28 }}>
+          {item.github && <a href={item.github} target="_blank" rel="noreferrer" style={{ padding: "12px 24px", borderRadius: 6, background: C.navy, color: C.white, textDecoration: "none", fontSize: 15, fontWeight: 700 }}>GitHub ↗</a>}
+          {item.demo && <a href={item.demo} target="_blank" rel="noreferrer" style={{ padding: "12px 24px", borderRadius: 6, background: C.blue, color: C.white, textDecoration: "none", fontSize: 15, fontWeight: 700 }}>Live Demo ↗</a>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+function Portfolio() {
+  const [selected, setSelected] = useState(null);
+  const [navScrolled, setNavScrolled] = useState(false);
+  const typedTitle = useTypingEffect(PROFILE.titles);
+  useReveal();
+
+  useEffect(() => {
+    // Scroll progress
+    const onScroll = () => {
+      const doc = document.documentElement;
+      const pct = (window.scrollY / (doc.scrollHeight - doc.clientHeight)) * 100;
+      const bar = document.getElementById("scroll-progress");
+      if (bar) bar.style.width = pct + "%";
+      setNavScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const scrollTo = id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  };
+
+  const navLinks = [
+    { label: "About",      id: "about" },
+    { label: "Experience", id: "experience" },
+    { label: "Projects",   id: "projects" },
+    { label: "Skills",     id: "skills" },
+    { label: "Contact",    id: "contact" },
+  ];
+
+  return (
+    <div style={{ fontFamily: "'DM Sans', sans-serif", color: C.navy, background: C.white, minHeight: "100vh" }}>
+
+      {/* NAVBAR */}
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: navScrolled ? "rgba(255,255,255,0.92)" : "transparent", backdropFilter: navScrolled ? "blur(14px)" : "none", boxShadow: navScrolled ? "0 1px 24px rgba(33,36,61,0.08)" : "none", transition: "all 0.35s", padding: "0 clamp(28px,5vw,88px)", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontWeight: 900, fontSize: 21, color: C.navy, cursor: "pointer", letterSpacing: "0" }}>
+          Nicole<span style={{ color: C.blue }}>.</span>
+        </span>
+        <div className="nav-links" style={{ display: "flex", gap: 36, alignItems: "center" }}>
+          {navLinks.map(l => (
+            <button key={l.id} className="nav-btn" onClick={() => scrollTo(l.id)}>{l.label}</button>
+          ))}
+          <a href="master.pdf" download className="resume-btn">Resume ↓</a>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <section style={{ position: "relative", minHeight: "88vh", display: "flex", alignItems: "center", padding: "92px clamp(28px,5vw,88px) 44px", overflow: "hidden" }}>
+        {/* Blobs */}
+        <div className="hero-blob" style={{ width: 560, height: 560, background: "rgba(201,233,210,0.28)", top: -120, right: -80 }} />
+        <div className="hero-blob" style={{ width: 360, height: 360, background: "rgba(255,227,227,0.3)", bottom: 40, left: -100 }} />
+
+        <div className="hero-inner" style={{ maxWidth: 1280, margin: "0 auto", width: "100%", display: "flex", alignItems: "center", gap: 64, position: "relative", zIndex: 1 }}>
+          {/* Left */}
+          <div style={{ flex: "1 1 620px" }}>
+            <p className="hero-in hero-in-1" style={{ margin: "0 0 10px", fontSize: 16, color: C.blue, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>{PROFILE.greeting}</p>
+            <h1 className="hero-name hero-in hero-in-2" style={{ margin: "0 0 10px", fontSize: 68, fontWeight: 900, color: C.navy, lineHeight: 1.02, letterSpacing: "0" }}>
+              {PROFILE.name}
+            </h1>
+            <div className="hero-in hero-in-3" style={{ margin: "0 0 22px", fontSize: 24, color: C.blue, fontWeight: 600, minHeight: "1.4em", fontFamily: "'DM Mono', monospace" }}>
+              {typedTitle}<span className="cursor"></span>
+            </div>
+            <p className="hero-in hero-in-3" style={{ margin: "0 0 30px", fontSize: 17, color: C.navy, lineHeight: 1.72, maxWidth: 600, opacity: 0.76 }}>{PROFILE.bio}</p>
+            <div className="hero-cta hero-in hero-in-4" style={{ display: "flex", gap: 16, marginBottom: 28, flexWrap: "wrap" }}>
+              <button className="cta-primary" onClick={() => scrollTo("contact")}>Hire Me</button>
+              <button className="cta-outline" onClick={() => scrollTo("projects")}>View Projects</button>
+            </div>
+            <div className="hero-social hero-in hero-in-5" style={{ display: "flex", gap: 28 }}>
+              {[{ label: "GitHub ↗", href: PROFILE.github }, { label: "LinkedIn ↗", href: PROFILE.linkedin }, { label: "Email ↗", href: `mailto:${PROFILE.email}` }].map(s => (
+                <a key={s.label} href={s.href} target="_blank" rel="noreferrer" className="social-link">{s.label}</a>
+              ))}
+            </div>
+          </div>
+          {/* Avatar */}
+          <Avatar />
+        </div>
+      </section>
+
+      {/* ABOUT */}
+      <section id="about" style={{ padding: "72px 0", background: C.offWhite }}>
+        <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
+          <p className="sec-label reveal">About</p>
+          <h2 className="sec-title reveal reveal-delay-1">Education & Background</h2>
+          <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+            {EDUCATION.map((edu, i) => (
+              <div key={edu.school} className={`reveal reveal-delay-${i + 1}`} style={{ flex: "1 1 360px", background: C.white, borderRadius: 8, padding: 34, boxShadow: "0 2px 16px rgba(33,36,61,0.07)" }}>
+                <div style={{ fontSize: 34, marginBottom: 14 }}>{edu.emoji}</div>
+                <h3 style={{ margin: "0 0 5px", fontSize: 20, fontWeight: 800, color: C.navy }}>{edu.school}</h3>
+                <p style={{ margin: "0 0 5px", fontSize: 16, color: C.blue, fontWeight: 600 }}>{edu.degree}</p>
+                <p style={{ margin: "0 0 16px", fontSize: 13.5, color: C.gray }}>{edu.period} · {edu.location}</p>
+                <div>{edu.courses.map(c => <Tag key={c} label={c} />)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURED */}
+      <section style={{ background: C.pink, padding: "72px 0" }}>
+        <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
+          <p className="sec-label reveal">Featured</p>
+          <h2 className="sec-title reveal reveal-delay-1">Highlighted Research & Projects</h2>
+          <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+            {FEATURED.map((p, i) => (
+              <div key={p.id} className={`featured-card reveal reveal-delay-${i + 1}`} onClick={() => setSelected(p)}>
+                <div style={{ width: 62, height: 62, borderRadius: 12, background: p.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, marginBottom: 18 }}>{p.emoji}</div>
+                <h3 style={{ margin: "0 0 5px", fontSize: 20, fontWeight: 700, color: C.navy }}>{p.title}</h3>
+                <p style={{ margin: "0 0 14px", fontSize: 13.5, color: C.gray }}>{p.subtitle}</p>
+                <p style={{ margin: "0 0 16px", fontSize: 15.5, color: C.navy, lineHeight: 1.58, opacity: 0.8 }}>{p.description.slice(0, 150)}…</p>
+                <div>{p.tags.map(t => <Tag key={t} label={t} />)}</div>
+                <div style={{ marginTop: 18, fontSize: 14.5, color: C.blue, fontWeight: 700 }}>View details →</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* EXPERIENCE */}
+      <section id="experience" style={{ padding: "72px 0", background: C.white }}>
+        <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
+          <p className="sec-label reveal">Experience</p>
+          <h2 className="sec-title reveal reveal-delay-1">Work Experience</h2>
+          <div>
+            {EXPERIENCE.map((exp, i) => (
+              <div key={exp.id} className={`exp-row reveal reveal-delay-${i + 1}`} onClick={() => setSelected(exp)}>
+                <div style={{ width: 62, height: 62, flexShrink: 0, borderRadius: 12, background: exp.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, alignSelf: "flex-start", marginTop: 2 }}>{exp.emoji}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4, gap: 12 }}>
+                    <div>
+                      <h3 style={{ margin: 0, fontSize: 19, fontWeight: 700, color: C.navy }}>{exp.role}</h3>
+                      <p style={{ margin: "3px 0 0", fontSize: 15.5, color: C.blue, fontWeight: 600 }}>{exp.company}</p>
+                    </div>
+                    <div style={{ textAlign: "right", flexShrink: 0 }}>
+                      <p style={{ margin: 0, fontSize: 13.5, color: C.gray }}>{exp.period}</p>
+                      <p style={{ margin: "3px 0 0", fontSize: 13.5, color: C.gray }}>{exp.location}</p>
+                    </div>
+                  </div>
+                  <p style={{ margin: "12px 0", fontSize: 15.5, color: C.navy, opacity: 0.78, lineHeight: 1.55 }}>{exp.bullets[0]}</p>
+                  <div>{exp.tags.map(t => <Tag key={t} label={t} dark />)}</div>
+                </div>
+                <div style={{ fontSize: 24, color: C.gray, alignSelf: "center" }}>›</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* MORE PROJECTS */}
+      <section id="projects" style={{ padding: "72px 0", background: C.offWhite }}>
+        <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
+          <p className="sec-label reveal">Work</p>
+          <h2 className="sec-title reveal reveal-delay-1">More Projects</h2>
+          <p className="reveal reveal-delay-1" style={{ margin: "-14px 0 24px", fontSize: 15.5, color: C.gray }}>Click any project for the full details.</p>
+          <div>
+            {PROJECTS.map((p, i) => (
+              <div key={p.id} className={`proj-row reveal reveal-delay-${i + 1}`} onClick={() => setSelected(p)} style={{ borderBottom: i < PROJECTS.length - 1 ? "1px solid rgba(33,36,61,0.08)" : "none" }}>
+                <div style={{ width: 62, height: 62, flexShrink: 0, borderRadius: 12, background: C.white, border: "1px solid rgba(33,36,61,0.09)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30 }}>{p.emoji}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
+                    <h3 style={{ margin: 0, fontSize: 19, fontWeight: 700, color: C.navy }}>{p.title}</h3>
+                    <span style={{ fontSize: 13.5, color: C.gray }}>{p.year}</span>
+                  </div>
+                  <p style={{ margin: "0 0 12px", fontSize: 15.5, color: C.gray, lineHeight: 1.55 }}>{p.description.slice(0, 165)}…</p>
+                  <div>{p.tags.map(t => <Tag key={t} label={t} dark />)}</div>
+                </div>
+                <div style={{ fontSize: 24, color: C.gray, alignSelf: "center" }}>›</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SKILLS */}
+      <section id="skills" style={{ padding: "72px 0", background: C.white }}>
+        <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
+          <p className="sec-label reveal">Skills</p>
+          <h2 className="sec-title reveal reveal-delay-1">Tools & Technologies</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 34 }}>
+            {Object.entries(SKILLS).map(([cat, items], ci) => (
+              <div key={cat} className={`reveal reveal-delay-${ci + 1}`}>
+                <h4 style={{ margin: "0 0 14px", fontSize: 13, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.12em" }}>{cat}</h4>
+                {items.map(s => (
+                  <div key={s} className="skill-item" style={{ fontSize: 15.5, color: C.navy, padding: "10px 0", borderBottom: "1px solid rgba(33,36,61,0.07)", display: "flex", alignItems: "center", gap: 12, transition: "color 0.2s" }}>
+                    <span className="skill-dot" />
+                    {s}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT */}
+      <section id="contact" style={{ background: C.pink, padding: "72px 0" }}>
+        <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
+          <p className="sec-label reveal">Contact</p>
+          <h2 className="sec-title reveal reveal-delay-1">Let's work together</h2>
+          <p className="reveal reveal-delay-2" style={{ margin: "-14px 0 30px", fontSize: 17, color: C.navy, opacity: 0.76, maxWidth: 620, lineHeight: 1.65 }}>
+            I'm actively looking for new opportunities. Whether you have a role in mind, a project to discuss, or just want to say hi — my inbox is always open.
+          </p>
+          <div className="reveal reveal-delay-3" style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+            {[
+              { label: "Say Hello ✉️", href: `mailto:${PROFILE.email}`, filled: true },
+              { label: "LinkedIn ↗",   href: PROFILE.linkedin,           filled: false },
+              { label: "GitHub ↗",     href: PROFILE.github,             filled: false },
+            ].map(btn => (
+              <a key={btn.label} href={btn.href} target="_blank" rel="noreferrer"
+                className="contact-btn"
+                style={{ background: btn.filled ? C.blue : "transparent", border: btn.filled ? "none" : `2px solid ${C.navy}`, color: btn.filled ? C.white : C.navy, boxShadow: btn.filled ? "0 4px 16px rgba(120,157,188,0.3)" : "none" }}
+                onMouseEnter={e => {
+                  if (btn.filled) { e.currentTarget.style.background = "#6a8aab"; e.currentTarget.style.transform = "translateY(-2px)"; }
+                  else { e.currentTarget.style.background = C.navy; e.currentTarget.style.color = C.white; e.currentTarget.style.transform = "translateY(-2px)"; }
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = btn.filled ? C.blue : "transparent";
+                  e.currentTarget.style.color = btn.filled ? C.white : C.navy;
+                  e.currentTarget.style.transform = "";
+                }}
+              >{btn.label}</a>
+            ))}
+          </div>
+          {/* Contact info */}
+          <div className="reveal reveal-delay-4" style={{ marginTop: 40, display: "flex", gap: 40, flexWrap: "wrap" }}>
+            {[
+              { label: "Email", value: PROFILE.email, href: `mailto:${PROFILE.email}` },
+              { label: "Phone", value: PROFILE.phone, href: `tel:${PROFILE.phone}` },
+              { label: "Location", value: PROFILE.location, href: null },
+            ].map(info => (
+              <div key={info.label}>
+                <p style={{ margin: "0 0 5px", fontSize: 12, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.1em" }}>{info.label}</p>
+                {info.href
+                  ? <a href={info.href} style={{ fontSize: 15.5, color: C.navy, fontWeight: 500, textDecoration: "none", opacity: 0.8 }}>{info.value}</a>
+                  : <p style={{ fontSize: 15.5, color: C.navy, fontWeight: 500, opacity: 0.8 }}>{info.value}</p>
+                }
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{ background: C.navy, padding: "30px clamp(28px,5vw,88px)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 22 }}>
+          <span style={{ fontWeight: 900, fontSize: 20, color: C.white, letterSpacing: "0" }}>Nicole<span style={{ color: C.blue }}>.</span></span>
+          <span style={{ fontSize: 14, color: "rgba(255,255,255,0.45)" }}>© {new Date().getFullYear()} Yu Yi (Nicole) Kuo · {PROFILE.location}</span>
+        </div>
+        <div className="footer-links" style={{ display: "flex", gap: 30 }}>
+          {navLinks.map(l => (
+            <button key={l.id} onClick={() => scrollTo(l.id)}
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 14, color: "rgba(255,255,255,0.5)", padding: 0, fontFamily: "'DM Sans',sans-serif", transition: "color 0.2s" }}
+              onMouseEnter={e => e.currentTarget.style.color = C.white}
+              onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.5)"}
+            >{l.label}</button>
+          ))}
+        </div>
+      </footer>
+
+      {selected && <Modal item={selected} onClose={() => setSelected(null)} />}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<Portfolio />);
+</script>
+</body>
+</html>

@@ -205,19 +205,60 @@
     border: 1px solid rgba(33,36,61,0.09);
     box-shadow: 0 2px 12px rgba(33,36,61,0.07);
   }
-  .school-icon.osu-icon span {
-    color: #BB0000;
-    font-family: Impact, Arial Black, sans-serif;
-    font-size: 54px;
-    font-weight: 900;
-    line-height: 1;
-    -webkit-text-stroke: 2px #666;
-    text-shadow: 0 2px 0 #fff;
+  .school-icon img {
+    max-width: 66px;
+    max-height: 58px;
+    object-fit: contain;
+  }
+  .school-icon.osu-icon img {
+    max-width: 64px;
+    max-height: 64px;
   }
   .school-icon.niu-icon img {
     width: 66px;
     height: 52px;
     object-fit: contain;
+  }
+
+  .brand-icon {
+    width: 62px;
+    height: 62px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid rgba(33,36,61,0.09);
+    box-shadow: 0 2px 12px rgba(33,36,61,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .brand-icon img {
+    max-width: 50px;
+    max-height: 42px;
+    object-fit: contain;
+    display: block;
+  }
+  .brand-icon.nuwa img {
+    max-width: 46px;
+    max-height: 46px;
+  }
+  .brand-icon.btse img {
+    max-width: 54px;
+    max-height: 36px;
+  }
+  .brand-icon.neten img {
+    max-width: 54px;
+    max-height: 24px;
+  }
+  .brand-icon.modal-icon {
+    width: 68px;
+    height: 68px;
+    margin-bottom: 18px;
+  }
+  .brand-icon.modal-icon img {
+    max-width: 58px;
+    max-height: 48px;
   }
 
   /* Section label */
@@ -296,6 +337,7 @@ const EDUCATION = [
     location:"Columbus, OH",
     courses: ["Machine Learning", "Natural Language Processing", "Parallel Computing", "Data Mining", "Computer Architecture"],
     icon:    "osu",
+    logo:    "osu-buckeyes-logo.svg?v=20260505",
   },
   {
     school:  "National Ilan University",
@@ -304,6 +346,7 @@ const EDUCATION = [
     location:"Yilan, Taiwan",
     courses: ["Data Structure", "Algorithms", "Operating Systems", "Software Engineering", "Data Science"],
     icon:    "niu",
+    logo:    "niu-logo.png?v=20260505",
   },
 ];
 
@@ -319,7 +362,7 @@ const EXPERIENCE = [
   {
     id: "exp1", role: "AI Intern", company: "NUWA Robotics",
     period: "May 2025 – Jun. 2025", location: "Taipei, Taiwan",
-    emoji: "🤖", color: C.mint,
+    emoji: "🤖", color: C.mint, logo: "nuwa-logo.png?v=20260505", logoClass: "nuwa",
     bullets: [
       "Cut memory consumption by up to 80% by implementing and benchmarking hybrid RAG systems using Milvus and BGE-M3 embeddings across multiple LLM variants",
       "Raised natural-language-to-MongoDB query accuracy by 13% via Chain of Thought prompt engineering and containerized evaluation workflows",
@@ -330,7 +373,7 @@ const EXPERIENCE = [
   {
     id: "exp2", role: "Auto Quality Assurance Intern", company: "BTSE",
     period: "Jan. 2024 – Jul. 2024", location: "Taipei, Taiwan",
-    emoji: "🧪", color: C.pink,
+    emoji: "🧪", color: C.pink, logo: "btse-logo.svg?v=20260505", logoClass: "btse",
     bullets: [
       "Expanded automated test coverage by 56% and reduced execution time by 43% by developing a Python/Pytest framework for cryptocurrency futures and spot market workflows",
       "Streamlined feature deployment by 58% by integrating Postman API checks and WebSocket market-data tests into Jenkins CI/CD and GitLab pipelines",
@@ -341,7 +384,7 @@ const EXPERIENCE = [
   {
     id: "exp3", role: "Software Engineer Intern", company: "Neten Digital Consultant",
     period: "Jul. 2023 – Sep. 2023", location: "Yilan, Taiwan",
-    emoji: "💻", color: "#E8E8F4",
+    emoji: "💻", color: "#E8E8F4", logo: "neten-logo.png?v=20260505", logoClass: "neten",
     bullets: [
       "Boosted user engagement by 29% by developing a responsive venue-sharing platform with Vue.js and QR-code-based interactions",
       "Accelerated user authentication by 20% by delivering 5 core features including multilingual support and validated auth flows",
@@ -475,23 +518,42 @@ function Tag({ label, dark }) {
 }
 
 function SchoolIcon({ edu }) {
-  if (edu.icon === "osu") {
+  if (edu.logo) {
     return (
-      <div className="school-icon osu-icon" aria-label={`${edu.school} icon`} title={edu.school}>
-        <span>O</span>
-      </div>
-    );
-  }
-
-  if (edu.icon === "niu") {
-    return (
-      <div className="school-icon niu-icon" title={edu.school}>
-        <img src="niu-logo.png?v=20260505" alt={`${edu.school} logo`} />
+      <div className={`school-icon ${edu.icon ? `${edu.icon}-icon` : ""}`} title={edu.school}>
+        <img src={edu.logo} alt={`${edu.school} logo`} />
       </div>
     );
   }
 
   return <div style={{ fontSize: 34, marginBottom: 14 }}>{edu.emoji || "🎓"}</div>;
+}
+
+function ItemIcon({ item, modal = false }) {
+  if (item.logo) {
+    return (
+      <div className={`brand-icon ${item.logoClass || ""} ${modal ? "modal-icon" : ""}`} title={item.company || item.title}>
+        <img src={item.logo} alt={`${item.company || item.title} logo`} />
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      width: modal ? 68 : 62,
+      height: modal ? 68 : 62,
+      flexShrink: 0,
+      borderRadius: modal ? 14 : 12,
+      background: item.color || C.offWhite,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: modal ? 36 : 30,
+      alignSelf: "flex-start",
+      marginBottom: modal ? 18 : 0,
+      marginTop: modal ? 0 : 2,
+    }}>{item.emoji}</div>
+  );
 }
 
 function Modal({ item, onClose }) {
@@ -509,7 +571,7 @@ function Modal({ item, onClose }) {
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()}>
         <button onClick={onClose} style={{ position: "absolute", top: 14, right: 14, background: "rgba(33,36,61,0.07)", border: "none", borderRadius: 8, width: 36, height: 36, cursor: "pointer", fontSize: 22, color: C.navy, lineHeight: 1, fontFamily: "'DM Sans',sans-serif" }}>×</button>
-        <div style={{ width: 68, height: 68, borderRadius: 14, background: item.color || C.offWhite, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, marginBottom: 18 }}>{item.emoji}</div>
+        <ItemIcon item={item} modal />
         <h2 style={{ margin: "0 0 3px", fontSize: 26, fontWeight: 800, color: C.navy, letterSpacing: "0" }}>{item.title || item.role}</h2>
         {(item.subtitle || item.company) && <p style={{ margin: "0 0 5px", fontSize: 16, color: C.blue, fontWeight: 600 }}>{item.subtitle || item.company}</p>}
         {item.period && <p style={{ margin: "0 0 18px", fontSize: 14.5, color: C.gray }}>{item.period}{item.location ? ` · ${item.location}` : ""}</p>}
@@ -662,7 +724,7 @@ function Portfolio() {
           <div>
             {EXPERIENCE.map((exp, i) => (
               <div key={exp.id} className={`exp-row reveal reveal-delay-${i + 1}`} onClick={() => setSelected(exp)}>
-                <div style={{ width: 62, height: 62, flexShrink: 0, borderRadius: 12, background: exp.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, alignSelf: "flex-start", marginTop: 2 }}>{exp.emoji}</div>
+                <ItemIcon item={exp} />
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4, gap: 12 }}>
                     <div>

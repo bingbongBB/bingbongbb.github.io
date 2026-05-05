@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nicole Kuo — AI · Software · QA Engineer</title>
+<title>Nicole's Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -57,7 +57,7 @@
     display: inline-block;
     padding: 6px 16px;
     border-radius: 20px;
-    font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.04em;
     background: rgba(33,36,61,0.07);
     color: #21243D;
     margin: 4px 5px 4px 0;
@@ -193,13 +193,40 @@
     animation: rotate-ring 18s linear infinite;
   }
 
+  .school-icon {
+    width: 78px;
+    height: 78px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid rgba(33,36,61,0.09);
+    box-shadow: 0 2px 12px rgba(33,36,61,0.07);
+  }
+  .school-icon.osu-icon span {
+    color: #BB0000;
+    font-family: Impact, Arial Black, sans-serif;
+    font-size: 54px;
+    font-weight: 900;
+    line-height: 1;
+    -webkit-text-stroke: 2px #666;
+    text-shadow: 0 2px 0 #fff;
+  }
+  .school-icon.niu-icon img {
+    width: 66px;
+    height: 52px;
+    object-fit: contain;
+  }
+
   /* Section label */
   .sec-label {
-    font-size: 13px; font-weight: 700; color: #789DBC;
+    font-size: 25px; font-weight: 700; color: #789DBC;
     letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px;
   }
   .sec-title {
-    font-size: 42px; font-weight: 900; color: #21243D;
+    font-size: 50px; font-weight: 900; color: #21243D;
     letter-spacing: 0; margin-bottom: 28px;
     line-height: 1.1;
   }
@@ -268,7 +295,7 @@ const EDUCATION = [
     period:  "Aug 2024 – May 2026 (Expected)",
     location:"Columbus, OH",
     courses: ["Machine Learning", "Natural Language Processing", "Parallel Computing", "Data Mining", "Computer Architecture"],
-    emoji:   "🎓",
+    icon:    "osu",
   },
   {
     school:  "National Ilan University",
@@ -276,7 +303,7 @@ const EDUCATION = [
     period:  "Sep 2020 – Jun 2024",
     location:"Yilan, Taiwan",
     courses: ["Data Structure", "Algorithms", "Operating Systems", "Software Engineering", "Data Science"],
-    emoji:   "📚",
+    icon:    "niu",
   },
 ];
 
@@ -447,6 +474,26 @@ function Tag({ label, dark }) {
   return <span className={`tag${dark ? " dark" : ""}`}>{label}</span>;
 }
 
+function SchoolIcon({ edu }) {
+  if (edu.icon === "osu") {
+    return (
+      <div className="school-icon osu-icon" aria-label={`${edu.school} icon`} title={edu.school}>
+        <span>O</span>
+      </div>
+    );
+  }
+
+  if (edu.icon === "niu") {
+    return (
+      <div className="school-icon niu-icon" title={edu.school}>
+        <img src="niu-logo.png?v=20260505" alt={`${edu.school} logo`} />
+      </div>
+    );
+  }
+
+  return <div style={{ fontSize: 34, marginBottom: 14 }}>{edu.emoji || "🎓"}</div>;
+}
+
 function Modal({ item, onClose }) {
   useEffect(() => {
     const h = e => { if (e.key === "Escape") onClose(); };
@@ -549,7 +596,7 @@ function Portfolio() {
             <h1 className="hero-name hero-in hero-in-2" style={{ margin: "0 0 10px", fontSize: 68, fontWeight: 900, color: C.navy, lineHeight: 1.02, letterSpacing: "0" }}>
               {PROFILE.name}
             </h1>
-            <div className="hero-in hero-in-3" style={{ margin: "0 0 22px", fontSize: 24, color: C.blue, fontWeight: 600, minHeight: "1.4em", fontFamily: "'DM Mono', monospace" }}>
+            <div className="hero-in hero-in-3" style={{ margin: "0 0 22px", fontSize: 30, color: C.blue, fontWeight: 600, minHeight: "1.4em", fontFamily: "'DM Mono', monospace" }}>
               {typedTitle}<span className="cursor"></span>
             </div>
             <p className="hero-in hero-in-3" style={{ margin: "0 0 30px", fontSize: 17, color: C.navy, lineHeight: 1.72, maxWidth: 600, opacity: 0.76 }}>{PROFILE.bio}</p>
@@ -576,10 +623,10 @@ function Portfolio() {
           <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
             {EDUCATION.map((edu, i) => (
               <div key={edu.school} className={`reveal reveal-delay-${i + 1}`} style={{ flex: "1 1 360px", background: C.white, borderRadius: 8, padding: 34, boxShadow: "0 2px 16px rgba(33,36,61,0.07)" }}>
-                <div style={{ fontSize: 34, marginBottom: 14 }}>{edu.emoji}</div>
-                <h3 style={{ margin: "0 0 5px", fontSize: 20, fontWeight: 800, color: C.navy }}>{edu.school}</h3>
-                <p style={{ margin: "0 0 5px", fontSize: 16, color: C.blue, fontWeight: 600 }}>{edu.degree}</p>
-                <p style={{ margin: "0 0 16px", fontSize: 13.5, color: C.gray }}>{edu.period} · {edu.location}</p>
+                <SchoolIcon edu={edu} />
+                <h3 style={{ margin: "0 0 5px", fontSize: 30, fontWeight: 800, color: C.navy }}>{edu.school}</h3>
+                <p style={{ margin: "0 0 5px", fontSize: 20, color: C.blue, fontWeight: 600 }}>{edu.degree}</p>
+                <p style={{ margin: "0 0 16px", fontSize: 17, color: C.gray }}>{edu.period} · {edu.location}</p>
                 <div>{edu.courses.map(c => <Tag key={c} label={c} />)}</div>
               </div>
             ))}

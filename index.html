@@ -9,8 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  }
   html { scroll-behavior: smooth; }
   body { background: #fff; color: #21243D; font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+  section[id] { scroll-margin-top: 96px; }
 
   /* Scroll progress bar */
   #scroll-progress {
@@ -21,36 +26,32 @@
 
   /* Fade-in animation — only for below-the-fold elements */
   .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
+    opacity: 0.92;
+    transform: translateY(8px);
+    transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
   }
   .reveal.visible {
     opacity: 1;
     transform: translateY(0);
   }
-  .reveal-delay-1 { transition-delay: 0.1s; }
-  .reveal-delay-2 { transition-delay: 0.2s; }
-  .reveal-delay-3 { transition-delay: 0.3s; }
-  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-1 { transition-delay: 40ms; }
+  .reveal-delay-2 { transition-delay: 80ms; }
+  .reveal-delay-3 { transition-delay: 120ms; }
+  .reveal-delay-4 { transition-delay: 160ms; }
 
   /* Hero elements animate in on load — not IntersectionObserver */
   @keyframes heroFadeUp {
-    from { opacity: 0; transform: translateY(24px); }
+    from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
   }
   .hero-in {
-    animation: heroFadeUp 0.7s cubic-bezier(.22,1,.36,1) both;
+    animation: heroFadeUp 300ms var(--ease-out) both;
   }
-  .hero-in-1 { animation-delay: 0.05s; }
-  .hero-in-2 { animation-delay: 0.15s; }
-  .hero-in-3 { animation-delay: 0.25s; }
-  .hero-in-4 { animation-delay: 0.38s; }
-  .hero-in-5 { animation-delay: 0.50s; }
-
-  /* Cursor blink */
-  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
-  .cursor { display: inline-block; width: 3px; height: 0.85em; background: #789DBC; margin-left: 4px; vertical-align: middle; animation: blink 1s step-end infinite; border-radius: 2px; }
+  .hero-in-1 { animation-delay: 30ms; }
+  .hero-in-2 { animation-delay: 80ms; }
+  .hero-in-3 { animation-delay: 120ms; }
+  .hero-in-4 { animation-delay: 160ms; }
+  .hero-in-5 { animation-delay: 200ms; }
 
   /* Tag pill */
   .tag {
@@ -69,45 +70,41 @@
   .nav-btn {
     background: none; border: none; cursor: pointer;
     font-size: 15px; font-weight: 500; color: #21243D;
-    padding: 0; transition: color 0.2s;
+    padding: 0; transition: color 160ms var(--ease-out), transform 160ms var(--ease-out);
     font-family: 'DM Sans', sans-serif;
   }
-  .nav-btn:hover { color: #789DBC; }
+  .nav-btn:active { transform: scale(0.97); }
 
   /* Card hover */
   .featured-card {
-    background: #fff; border-radius: 8px; padding: 34px;
+    background: #fff; border-radius: 8px; padding: 30px;
     cursor: pointer; flex: 1 1 360px;
     box-shadow: 0 2px 12px rgba(33,36,61,0.08);
-    transition: transform 0.25s cubic-bezier(.22,1,.36,1), box-shadow 0.25s;
+    transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out);
   }
-  .featured-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 18px 48px rgba(33,36,61,0.15);
-  }
+  .featured-card:active { transform: scale(0.99); }
 
   .exp-row {
     display: flex; gap: 28px; padding: 28px 0;
     border-bottom: 1px solid rgba(33,36,61,0.08);
-    cursor: pointer; transition: background 0.2s;
+    cursor: pointer; transition: background 160ms var(--ease-out), transform 160ms var(--ease-out);
     border-radius: 6px;
   }
-  .exp-row:hover { background: rgba(33,36,61,0.025); }
+  .exp-row:active { transform: scale(0.995); }
 
   .proj-row {
     display: flex; gap: 28px; align-items: flex-start;
-    padding: 28px 0; cursor: pointer; transition: background 0.2s;
+    padding: 28px 0; cursor: pointer; transition: background 160ms var(--ease-out), transform 160ms var(--ease-out);
     border-radius: 6px;
   }
-  .proj-row:hover { background: rgba(33,36,61,0.025); }
+  .proj-row:active { transform: scale(0.995); }
 
   /* Skill dot */
   .skill-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: #C9E9D2; flex-shrink: 0;
-    transition: background 0.2s, transform 0.2s;
+    transition: background 160ms var(--ease-out), transform 160ms var(--ease-out);
   }
-  .skill-item:hover .skill-dot { background: #789DBC; transform: scale(1.5); }
 
   /* Hero gradient blob */
   .hero-blob {
@@ -123,7 +120,7 @@
     z-index: 1000;
     display: flex; align-items: center; justify-content: center;
     padding: 24px;
-    animation: fadeIn 0.2s ease;
+    animation: fadeIn 180ms var(--ease-out);
   }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .modal-box {
@@ -133,9 +130,9 @@
     max-height: 88vh; overflow-y: auto;
     box-shadow: 0 32px 80px rgba(33,36,61,0.24);
     position: relative;
-    animation: slideUp 0.28s cubic-bezier(.22,1,.36,1);
+    animation: slideUp 240ms var(--ease-out);
   }
-  @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
   /* Scrollbar */
   ::-webkit-scrollbar { width: 6px; }
@@ -148,10 +145,10 @@
     background: #789DBC; color: #fff;
     font-size: 15px; font-weight: 700; cursor: pointer;
     font-family: 'DM Sans', sans-serif;
-    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    transition: background 160ms var(--ease-out), transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
     box-shadow: 0 4px 16px rgba(120,157,188,0.3);
   }
-  .cta-primary:hover { background: #6a8aab; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(120,157,188,0.4); }
+  .cta-primary:active { transform: scale(0.97); }
 
   .cta-outline {
     padding: 15px 36px; border-radius: 5px;
@@ -159,38 +156,39 @@
     background: transparent; color: #21243D;
     font-size: 15px; font-weight: 700; cursor: pointer;
     font-family: 'DM Sans', sans-serif;
-    transition: all 0.2s;
+    transition: background 160ms var(--ease-out), color 160ms var(--ease-out), transform 160ms var(--ease-out);
   }
-  .cta-outline:hover { background: #21243D; color: #fff; }
+  .cta-outline:active { transform: scale(0.97); }
 
   .resume-btn {
     padding: 9px 22px; border-radius: 5px;
     background: #789DBC; color: #fff;
     text-decoration: none; font-size: 14px; font-weight: 700;
-    transition: background 0.2s, transform 0.15s;
+    transition: background 160ms var(--ease-out), transform 160ms var(--ease-out);
     font-family: 'DM Sans', sans-serif;
   }
-  .resume-btn:hover { background: #6a8aab; transform: translateY(-1px); }
+  .resume-btn:active { transform: scale(0.97); }
 
   .social-link {
-    font-size: 14.5px; color: #8695A4; font-weight: 500;
-    text-decoration: none; transition: color 0.2s;
+    font-size: 14.5px; color: #637387; font-weight: 600;
+    text-decoration: none; transition: color 160ms var(--ease-out), transform 160ms var(--ease-out);
   }
-  .social-link:hover { color: #21243D; }
+  .social-link:active { transform: scale(0.97); }
 
   .contact-btn {
     padding: 15px 36px; border-radius: 5px;
     font-size: 15px; font-weight: 700;
-    display: inline-block; transition: all 0.2s;
+    display: inline-block;
+    transition: background 160ms var(--ease-out), color 160ms var(--ease-out), transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
     text-decoration: none; font-family: 'DM Sans', sans-serif;
   }
+  .contact-btn:active { transform: scale(0.97); }
 
-  /* Avatar ring animation */
-  @keyframes rotate-ring { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  /* Avatar ring */
   .avatar-ring {
     position: absolute; inset: -6px; border-radius: 50%;
-    border: 2px dashed rgba(120,157,188,0.35);
-    animation: rotate-ring 18s linear infinite;
+    border: 2px solid rgba(120,157,188,0.28);
+    opacity: 0.9;
   }
 
   .school-icon {
@@ -215,8 +213,8 @@
     max-height: 64px;
   }
   .school-icon.niu-icon img {
-    width: 66px;
-    height: 52px;
+    max-width: 64px;
+    max-height: 64px;
     object-fit: contain;
   }
 
@@ -263,13 +261,44 @@
 
   /* Section label */
   .sec-label {
-    font-size: 25px; font-weight: 700; color: #789DBC;
-    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 8px;
+    font-size: 15px; font-weight: 800; color: #789DBC;
+    letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 10px;
   }
   .sec-title {
-    font-size: 50px; font-weight: 900; color: #21243D;
-    letter-spacing: 0; margin-bottom: 28px;
+    font-size: 42px; font-weight: 900; color: #21243D;
+    letter-spacing: 0; margin-bottom: 24px;
     line-height: 1.1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nav-btn:hover { color: #789DBC; }
+    .featured-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 44px rgba(33,36,61,0.14);
+    }
+    .exp-row:hover,
+    .proj-row:hover {
+      background: rgba(33,36,61,0.025);
+    }
+    .skill-item:hover .skill-dot { background: #789DBC; transform: scale(1.45); }
+    .cta-primary:hover { background: #6a8aab; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(120,157,188,0.4); }
+    .cta-outline:hover { background: #21243D; color: #fff; }
+    .resume-btn:hover { background: #6a8aab; transform: translateY(-1px); }
+    .social-link:hover { color: #21243D; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 1ms !important;
+      scroll-behavior: auto !important;
+    }
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   @media (max-width: 900px) {
@@ -301,7 +330,7 @@
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
 <script type="text/babel">
-const { useState, useEffect, useRef } = React;
+const { useState, useEffect } = React;
 
 // ─── Tokens ───────────────────────────────────────────────────────────────────
 const C = {
@@ -333,7 +362,7 @@ const EDUCATION = [
   {
     school:  "The Ohio State University",
     degree:  "M.S. Computer Science and Engineering",
-    period:  "Aug 2024 – May 2026 (Expected)",
+    period:  "Aug 2024 – May 2026",
     location:"Columbus, OH",
     courses: ["Machine Learning", "Natural Language Processing", "Parallel Computing", "Data Mining", "Computer Architecture"],
     icon:    "osu",
@@ -459,32 +488,6 @@ const PROJECTS = [
 ];
 
 // ─── Hooks ────────────────────────────────────────────────────────────────────
-function useTypingEffect(words, speed = 80, pause = 1800) {
-  const [display, setDisplay] = useState("");
-  const [wIdx, setWIdx] = useState(0);
-  const [charIdx, setCharIdx] = useState(0);
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    const word = words[wIdx];
-    let timeout;
-    if (!deleting && charIdx < word.length) {
-      timeout = setTimeout(() => setCharIdx(c => c + 1), speed);
-    } else if (!deleting && charIdx === word.length) {
-      timeout = setTimeout(() => setDeleting(true), pause);
-    } else if (deleting && charIdx > 0) {
-      timeout = setTimeout(() => setCharIdx(c => c - 1), speed / 2);
-    } else if (deleting && charIdx === 0) {
-      setDeleting(false);
-      setWIdx(i => (i + 1) % words.length);
-    }
-    setDisplay(word.slice(0, charIdx));
-    return () => clearTimeout(timeout);
-  }, [charIdx, deleting, wIdx, words, speed, pause]);
-
-  return display;
-}
-
 function useReveal() {
   useEffect(() => {
     const els = document.querySelectorAll('.reveal');
@@ -598,7 +601,7 @@ function Modal({ item, onClose }) {
 function Portfolio() {
   const [selected, setSelected] = useState(null);
   const [navScrolled, setNavScrolled] = useState(false);
-  const typedTitle = useTypingEffect(PROFILE.titles);
+  const heroTitle = PROFILE.titles[1] || PROFILE.titles[0];
   useReveal();
 
   useEffect(() => {
@@ -633,7 +636,7 @@ function Portfolio() {
     <div style={{ fontFamily: "'DM Sans', sans-serif", color: C.navy, background: C.white, minHeight: "100vh" }}>
 
       {/* NAVBAR */}
-      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: navScrolled ? "rgba(255,255,255,0.92)" : "transparent", backdropFilter: navScrolled ? "blur(14px)" : "none", boxShadow: navScrolled ? "0 1px 24px rgba(33,36,61,0.08)" : "none", transition: "all 0.35s", padding: "0 clamp(28px,5vw,88px)", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: navScrolled ? "rgba(255,255,255,0.92)" : "transparent", backdropFilter: navScrolled ? "blur(14px)" : "none", boxShadow: navScrolled ? "0 1px 24px rgba(33,36,61,0.08)" : "none", transition: "background 180ms cubic-bezier(0.23,1,0.32,1), box-shadow 180ms cubic-bezier(0.23,1,0.32,1), backdrop-filter 180ms cubic-bezier(0.23,1,0.32,1)", padding: "0 clamp(28px,5vw,88px)", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontWeight: 900, fontSize: 21, color: C.navy, cursor: "pointer", letterSpacing: "0" }}>
           Nicole<span style={{ color: C.blue }}>.</span>
         </span>
@@ -646,7 +649,7 @@ function Portfolio() {
       </nav>
 
       {/* HERO */}
-      <section style={{ position: "relative", minHeight: "88vh", display: "flex", alignItems: "center", padding: "92px clamp(28px,5vw,88px) 44px", overflow: "hidden" }}>
+      <section style={{ position: "relative", minHeight: "84vh", display: "flex", alignItems: "center", padding: "92px clamp(28px,5vw,88px) 36px", overflow: "hidden" }}>
         {/* Blobs */}
         <div className="hero-blob" style={{ width: 560, height: 560, background: "rgba(201,233,210,0.28)", top: -120, right: -80 }} />
         <div className="hero-blob" style={{ width: 360, height: 360, background: "rgba(255,227,227,0.3)", bottom: 40, left: -100 }} />
@@ -658,8 +661,8 @@ function Portfolio() {
             <h1 className="hero-name hero-in hero-in-2" style={{ margin: "0 0 10px", fontSize: 68, fontWeight: 900, color: C.navy, lineHeight: 1.02, letterSpacing: "0" }}>
               {PROFILE.name}
             </h1>
-            <div className="hero-in hero-in-3" style={{ margin: "0 0 22px", fontSize: 30, color: C.blue, fontWeight: 600, minHeight: "1.4em", fontFamily: "'DM Mono', monospace" }}>
-              {typedTitle}<span className="cursor"></span>
+            <div className="hero-in hero-in-3" style={{ margin: "0 0 22px", fontSize: 28, color: C.blue, fontWeight: 600, minHeight: "1.4em", fontFamily: "'DM Mono', monospace" }}>
+              {heroTitle}
             </div>
             <p className="hero-in hero-in-3" style={{ margin: "0 0 30px", fontSize: 17, color: C.navy, lineHeight: 1.72, maxWidth: 600, opacity: 0.76 }}>{PROFILE.bio}</p>
             <div className="hero-cta hero-in hero-in-4" style={{ display: "flex", gap: 16, marginBottom: 28, flexWrap: "wrap" }}>
@@ -678,17 +681,17 @@ function Portfolio() {
       </section>
 
       {/* ABOUT */}
-      <section id="about" style={{ padding: "72px 0", background: C.offWhite }}>
+      <section id="about" style={{ padding: "64px 0", background: C.offWhite }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
           <p className="sec-label reveal">About</p>
           <h2 className="sec-title reveal reveal-delay-1">Education & Background</h2>
           <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
             {EDUCATION.map((edu, i) => (
-              <div key={edu.school} className={`reveal reveal-delay-${i + 1}`} style={{ flex: "1 1 360px", background: C.white, borderRadius: 8, padding: 34, boxShadow: "0 2px 16px rgba(33,36,61,0.07)" }}>
+              <div key={edu.school} className={`reveal reveal-delay-${i + 1}`} style={{ flex: "1 1 360px", background: C.white, borderRadius: 8, padding: 30, boxShadow: "0 2px 16px rgba(33,36,61,0.07)" }}>
                 <SchoolIcon edu={edu} />
-                <h3 style={{ margin: "0 0 5px", fontSize: 30, fontWeight: 800, color: C.navy }}>{edu.school}</h3>
-                <p style={{ margin: "0 0 5px", fontSize: 20, color: C.blue, fontWeight: 600 }}>{edu.degree}</p>
-                <p style={{ margin: "0 0 16px", fontSize: 17, color: C.gray }}>{edu.period} · {edu.location}</p>
+                <h3 style={{ margin: "0 0 5px", fontSize: 24, fontWeight: 800, color: C.navy }}>{edu.school}</h3>
+                <p style={{ margin: "0 0 5px", fontSize: 17, color: C.blue, fontWeight: 600 }}>{edu.degree}</p>
+                <p style={{ margin: "0 0 16px", fontSize: 15.5, color: C.gray }}>{edu.period} · {edu.location}</p>
                 <div>{edu.courses.map(c => <Tag key={c} label={c} />)}</div>
               </div>
             ))}
@@ -697,7 +700,7 @@ function Portfolio() {
       </section>
 
       {/* FEATURED */}
-      <section style={{ background: C.pink, padding: "72px 0" }}>
+      <section style={{ background: C.pink, padding: "64px 0" }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
           <p className="sec-label reveal">Featured</p>
           <h2 className="sec-title reveal reveal-delay-1">Highlighted Research & Projects</h2>
@@ -717,7 +720,7 @@ function Portfolio() {
       </section>
 
       {/* EXPERIENCE */}
-      <section id="experience" style={{ padding: "72px 0", background: C.white }}>
+      <section id="experience" style={{ padding: "64px 0", background: C.white }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
           <p className="sec-label reveal">Experience</p>
           <h2 className="sec-title reveal reveal-delay-1">Work Experience</h2>
@@ -747,7 +750,7 @@ function Portfolio() {
       </section>
 
       {/* MORE PROJECTS */}
-      <section id="projects" style={{ padding: "72px 0", background: C.offWhite }}>
+      <section id="projects" style={{ padding: "64px 0", background: C.offWhite }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
           <p className="sec-label reveal">Work</p>
           <h2 className="sec-title reveal reveal-delay-1">More Projects</h2>
@@ -772,7 +775,7 @@ function Portfolio() {
       </section>
 
       {/* SKILLS */}
-      <section id="skills" style={{ padding: "72px 0", background: C.white }}>
+      <section id="skills" style={{ padding: "64px 0", background: C.white }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
           <p className="sec-label reveal">Skills</p>
           <h2 className="sec-title reveal reveal-delay-1">Tools & Technologies</h2>
@@ -793,7 +796,7 @@ function Portfolio() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" style={{ background: C.pink, padding: "72px 0" }}>
+      <section id="contact" style={{ background: C.pink, padding: "64px 0" }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
           <p className="sec-label reveal">Contact</p>
           <h2 className="sec-title reveal reveal-delay-1">Let's work together</h2>

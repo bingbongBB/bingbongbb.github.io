@@ -325,8 +325,8 @@
 <div id="scroll-progress"></div>
 <div id="root"></div>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
 <script type="text/babel">
@@ -349,7 +349,7 @@ const PROFILE = {
   fullName: "Yu Yi (Nicole) Kuo",
   greeting: "Hi, I'm",
   titles:   ["AI Engineer", "Software Engineer", "QA Engineer"],
-  bio:      "CS graduate student at Ohio State, passionate about building AI-powered systems, automated testing pipelines, and full-stack applications. From RAG-based LLM systems to mixed-reality diagnostics — I love tackling problems that sit at the edge of research and engineering.",
+  bio:      "CS graduate student and research assistant at Ohio State, working on video-based physiological sensing and AI-powered systems. From RAG-based LLM pipelines to mixed-reality diagnostics — I love tackling problems that sit at the edge of research and engineering.",
   location: "Columbus, OH",
   email:    "kuo.382@osu.edu",
   phone:    "(614) 290-4499",
@@ -380,61 +380,92 @@ const EDUCATION = [
 ];
 
 const SKILLS = {
-  "Languages":  ["Python", "JavaScript", "Go", "SQL", "Bash"],
-  "AI / ML":    ["PyTorch", "TensorFlow", "RAG", "Prompt Engineering", "OpenCV", "Milvus (Vector DB)", "Faiss"],
-  "Databases":  ["MongoDB", "MySQL"],
-  "QA & Tools": ["Pytest", "Postman", "Jira", "WebSocket", "REST APIs"],
-  "DevOps":     ["Docker", "Jenkins", "Git / GitLab", "CI/CD"],
+  "Languages":    ["Python", "JavaScript", "Go", "SQL", "Bash"],
+  "Frameworks":   ["PyTorch", "TensorFlow", "Hugging Face", "Vue.js", "Pytest", "Allure"],
+  "AI / ML & Data": ["LLM Evaluation", "RAG", "Prompt Engineering", "Vector Search (Milvus, Faiss)", "OpenCV", "MongoDB", "MySQL"],
+  "DevOps & Tools": ["Docker", "Jenkins", "GitLab CI/CD", "Git", "Postman", "Jira", "REST APIs", "WebSocket"],
 };
 
 const EXPERIENCE = [
+  {
+    id: "exp0", role: "Research Assistant", company: "The Ohio State University",
+    period: "Oct 2025 – May 2026", location: "Columbus, OH",
+    emoji: "🫀", color: C.mint, logo: "osu-buckeyes-logo.svg?v=20260505", logoClass: "osu",
+    bullets: [
+      "Developed a PyTorch video-processing pipeline that converts high-motion facial videos into cleaner training samples through frame-by-frame motion replacement and temporal stabilization, processing 438 subject-matched video pairs",
+      "Built a controlled evaluation workflow across CNN, Transformer, and Mamba-based heart-rate estimation models, testing stable, high-motion, and low-quality recordings to compare robustness across 3 architectures",
+      "Improved video-based heart-rate prediction accuracy by up to 67.82% in motion-heavy settings by reducing motion artifacts while preserving subtle pulse-related facial color signals",
+    ],
+    tags: ["Python", "PyTorch", "OpenCV", "rPPG", "Video Processing"],
+  },
   {
     id: "exp1", role: "AI Intern", company: "NUWA Robotics",
     period: "May 2025 – Jun. 2025", location: "Taipei, Taiwan",
     emoji: "🤖", color: C.mint, logo: "nuwa-logo.png?v=20260505", logoClass: "nuwa",
     bullets: [
-      "Cut memory consumption by up to 80% by implementing and benchmarking hybrid RAG systems using Milvus and BGE-M3 embeddings across multiple LLM variants",
-      "Raised natural-language-to-MongoDB query accuracy by 13% via Chain of Thought prompt engineering and containerized evaluation workflows",
-      "Systematized cross-model evaluation with automated testing pipelines across QWen2 and Llama 3.2 using semantic similarity and generation-efficiency metrics",
+      "Optimized an enterprise RAG pipeline with hybrid semantic-keyword retrieval (BGE-M3 + RRF fusion), cross-encoder reranking, keyword filtering, and header-based context merging — improving long-document retrieval quality and resolving production timeout issues",
+      "Built a text-to-MongoDB query module with schema-aware Chain-of-Thought prompting and dynamic few-shot example selection, improving query accuracy by 13% over baseline across 4 prompting strategies",
+      "Benchmarked Cache-Augmented Generation against RAG across 4 model architectures (Qwen2-1.5B, Llama 3.2-1B/3B, Llama 3.1-8B), reducing GPU memory usage by up to 80% as a reference for latency-sensitive architecture decisions",
     ],
-    tags: ["Python", "RAG", "Milvus", "LLM", "Docker"],
+    tags: ["Python", "RAG", "BGE-M3", "Milvus", "MongoDB", "LLM"],
   },
   {
     id: "exp2", role: "Auto Quality Assurance Intern", company: "BTSE",
     period: "Jan. 2024 – Jul. 2024", location: "Taipei, Taiwan",
     emoji: "🧪", color: C.pink, logo: "btse-logo.svg?v=20260505", logoClass: "btse",
     bullets: [
-      "Expanded automated test coverage by 56% and reduced execution time by 43% by developing a Python/Pytest framework for cryptocurrency futures and spot market workflows",
-      "Streamlined feature deployment by 58% by integrating Postman API checks and WebSocket market-data tests into Jenkins CI/CD and GitLab pipelines",
-      "Shortened defect resolution time by 27% by formalizing Jira-based QA triage workflows across a 10+ member team",
+      "Developed Pytest test suites for Futures and Spot trading workflows — liquidation triggers, position-mode switching, margin calculations — expanding regression coverage by 56%",
+      "Extended Jenkins and GitLab CI/CD pipelines with REST API and WebSocket regression scripts as merge-triggered validation gates, reducing release validation time by 58%",
+      "Correlated recurring test failures across releases via Allure reports and Jira defect patterns, surfacing root-cause clusters that cut average defect resolution time by 27% for a 10+-member release team",
     ],
-    tags: ["Pytest", "Python", "Postman", "WebSocket", "Jenkins", "CI/CD"],
+    tags: ["Pytest", "Python", "Jenkins", "GitLab CI/CD", "WebSocket", "Allure"],
   },
   {
     id: "exp3", role: "Software Engineer Intern", company: "Neten Digital Consultant",
     period: "Jul. 2023 – Sep. 2023", location: "Yilan, Taiwan",
     emoji: "💻", color: "#E8E8F4", logo: "neten-logo.png?v=20260505", logoClass: "neten",
     bullets: [
-      "Boosted user engagement by 29% by developing a responsive venue-sharing platform with Vue.js and QR-code-based interactions",
-      "Accelerated user authentication by 20% by delivering 5 core features including multilingual support and validated auth flows",
-      "Enhanced cross-regional satisfaction by 16% and cut deployment time by 40% with a Go backend, Vuetify frontend, and containerized deployment",
+      "Built a responsive Vue.js frontend for a venue-sharing platform with reusable components, multilingual (i18n) support, and QR-code-driven entry flows — shipping 5 production features that increased user engagement by 29%",
+      "Designed REST APIs in Go with MySQL-backed normalized schemas and indexed lookups, supporting validated authentication flows that reduced average login latency by 20%",
+      "Architected a generic JSON Schema specification with multi-level tree structures to render diverse venue layouts from a single data format, cutting new-venue onboarding effort by 40%",
     ],
-    tags: ["Vue.js", "Go", "MySQL", "Docker", "Vuetify"],
+    tags: ["Vue.js", "Go", "MySQL", "i18n", "REST APIs"],
   },
 ];
 
 const FEATURED = [
   {
     id: "f1", title: "Motion Replacement for Video-Based rPPG",
-    subtitle: "ML Research · Apr 2026",
+    subtitle: "ML Research · The Ohio State University · Oct 2025 – May 2026",
     tags: ["Python", "PyTorch", "OpenCV", "rPPG", "Video Processing"],
     color: C.mint, emoji: "🫀",
-    description: "A 2-stage video preprocessing pipeline for remote physiological measurement (rPPG) that significantly reduces heart-rate estimation error in motion-heavy scenarios by replacing high-motion facial frames with lower-motion equivalents.",
-    highlights: [
-      "Reduced heart-rate estimation error by up to 44.92% in motion-heavy scenarios",
-      "Improved robustness across 3 supervised backbones (PhysNet, EfficientPhys, etc.)",
-      "Converted 256×256 high-motion videos using frame-by-frame motion replacement + temporal stabilization",
-      "Validated on 2 public datasets (VIPL-HR, MMPD) — MAE as low as 3.26 on VIPL-HR",
+    description: "A 2-stage video preprocessing pipeline for remote physiological measurement (rPPG) that improves heart-rate estimation in motion-heavy scenarios by replacing high-motion facial frames with lower-motion equivalents while preserving pulse-related color signals.",
+    caseStudy: [
+      {
+        label: "Problem",
+        text: "Remote photoplethysmography (rPPG) estimates heart rate from subtle color changes in facial video — no sensors required. But those color signals are tiny, and head motion easily drowns them out: models that perform well on stable recordings degrade sharply on real-world, motion-heavy video. The goal was to make existing rPPG models robust to motion without retraining them from scratch.",
+      },
+      {
+        label: "Process",
+        bullets: [
+          "Analyzed failure modes by grouping recordings into stable, high-motion, and low-quality conditions to isolate where and why estimation error spikes",
+          "Designed a 2-stage preprocessing pipeline: frame-by-frame motion replacement swaps high-motion facial frames with lower-motion equivalents, then temporal stabilization smooths residual jitter — both tuned to preserve the subtle pulse-related chrominance signal",
+          "Built the pipeline in PyTorch and processed 438 subject-matched video pairs to create controlled clean-vs-noisy training and evaluation sets",
+          "Ran a controlled evaluation across CNN, Transformer, and Mamba-based heart-rate estimation models to verify the gains were architecture-independent",
+        ],
+      },
+      {
+        label: "Results",
+        bullets: [
+          "Improved heart-rate prediction accuracy by up to 67.82% in motion-heavy settings",
+          "Gains held consistently across all 3 model architectures — the preprocessing helps regardless of backbone",
+          "Validated on 2 public datasets (VIPL-HR, MMPD), reaching MAE as low as 3.26 on VIPL-HR",
+        ],
+      },
+      {
+        label: "Learnings",
+        text: "Data quality beats model complexity: a preprocessing step that respects the physics of the signal improved every architecture tested, more than any single model change. Designing the evaluation matrix (conditions × architectures) up front made the results easy to trust and communicate.",
+      },
     ],
     github: "https://github.com/bingbongBB",
     demo: null,
@@ -442,14 +473,35 @@ const FEATURED = [
   {
     id: "f2", title: "AI Recommendation System for FDA Device Safety",
     subtitle: "AI / NLP · Nov 2025",
-    tags: ["GPT-4", "MeSH", "MedCPT", "Python", "RAG"],
+    tags: ["GPT-4", "MeSH", "MedCPT", "Python", "Vector Search"],
     color: C.pink, emoji: "🏥",
-    description: "A recommendation pipeline for 640+ MAUDE FDA publications that uses GPT-4 to enrich MeSH terms and MedCPT cosine-similarity search to surface clinically comparable device safety cases — even under sparse metadata.",
-    highlights: [
-      "Built recommendation pipeline covering 640+ MAUDE publications",
-      "Used GPT-4 to enrich MeSH terms from titles and abstracts, reducing terminology mismatch",
-      "Enforced MeSH exact-match retrieval with MedCPT cosine-similarity fallback for coverage",
-      "Validated with 2 domain raters across 60 source papers and top-5 recommendations",
+    description: "A recommendation pipeline for 640+ MAUDE FDA publications that uses GPT-4 to enrich MeSH terms and MedCPT similarity search to surface clinically comparable device safety cases — even under sparse metadata.",
+    caseStudy: [
+      {
+        label: "Problem",
+        text: "Medical reviewers investigating FDA device safety reports (MAUDE) need to find clinically comparable prior cases, but the underlying publications have sparse, inconsistent metadata. Keyword search misses related cases due to terminology mismatch, and pure semantic search surfaces superficially similar but clinically irrelevant results.",
+      },
+      {
+        label: "Process",
+        bullets: [
+          "Used GPT-4 to enrich MeSH terms from titles and abstracts, normalizing terminology so publications indexed under different vocabulary become comparable",
+          "Built a two-tier retrieval strategy: MeSH exact-match first for clinical precision, then MedCPT cosine-similarity fallback via vector search to guarantee coverage",
+          "Engineered the fallback to always maintain at least 10 candidates per query, keeping recommendations useful even for publications with minimal metadata",
+          "Designed a structured evaluation protocol with defined relevance criteria rather than ad-hoc judgment",
+        ],
+      },
+      {
+        label: "Results",
+        bullets: [
+          "Validation pipeline covering 640+ MAUDE publications",
+          "Maintained ≥10 candidates under sparse metadata, improving robustness of related-case discovery in sparse literature settings",
+          "Top-5 ranking quality validated by 2 domain raters across 60 source papers using structured evaluation criteria",
+        ],
+      },
+      {
+        label: "Learnings",
+        text: "In high-stakes domains, hybrid retrieval (exact-match precision + semantic recall) outperforms either approach alone. Investing in a structured human evaluation protocol early made it possible to compare pipeline variants objectively instead of by intuition.",
+      },
     ],
     github: "https://github.com/bingbongBB",
     demo: null,
@@ -580,7 +632,19 @@ function Modal({ item, onClose }) {
         {item.period && <p style={{ margin: "0 0 18px", fontSize: 14.5, color: C.gray }}>{item.period}{item.location ? ` · ${item.location}` : ""}</p>}
         <div style={{ marginBottom: 18 }}>{tags.map(t => <Tag key={t} label={t} />)}</div>
         {item.description && <p style={{ fontSize: 16.5, color: C.navy, lineHeight: 1.65, margin: "0 0 22px", opacity: 0.86 }}>{item.description}</p>}
-        {bullets.length > 0 && (
+        {item.caseStudy ? (
+          item.caseStudy.map(sec => (
+            <div key={sec.label} style={{ marginBottom: 22 }}>
+              <h4 style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.08em" }}>{sec.label}</h4>
+              {sec.text && <p style={{ margin: 0, fontSize: 15.5, color: C.navy, lineHeight: 1.65, opacity: 0.86 }}>{sec.text}</p>}
+              {sec.bullets && (
+                <ul style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
+                  {sec.bullets.map((b, i) => <li key={i} style={{ fontSize: 15.5, color: C.navy, lineHeight: 1.65, opacity: 0.86 }}>{b}</li>)}
+                </ul>
+              )}
+            </div>
+          ))
+        ) : bullets.length > 0 && (
           <>
             <h4 style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.08em" }}>{item.bullets ? "Achievements" : "Highlights"}</h4>
             <ul style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
@@ -644,7 +708,7 @@ function Portfolio() {
           {navLinks.map(l => (
             <button key={l.id} className="nav-btn" onClick={() => scrollTo(l.id)}>{l.label}</button>
           ))}
-          <a href="master.pdf" download className="resume-btn">Resume ↓</a>
+          <a href="master.pdf?v=20260719" download className="resume-btn">Resume ↓</a>
         </div>
       </nav>
 

@@ -6,7 +6,7 @@
 <title>Nicole's Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=DM+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -14,7 +14,7 @@
     --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   }
   html { scroll-behavior: smooth; }
-  body { background: #fff; color: #21243D; font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+  body { background: #fff; color: #21243D; font-family: 'DM Sans', 'Noto Sans TC', sans-serif; overflow-x: hidden; }
   section[id] { scroll-margin-top: 96px; }
 
   /* Scroll progress bar */
@@ -71,7 +71,7 @@
     background: none; border: none; cursor: pointer;
     font-size: 15px; font-weight: 500; color: #21243D;
     padding: 0; transition: color 160ms var(--ease-out), transform 160ms var(--ease-out);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
   }
   .nav-btn:active { transform: scale(0.97); }
 
@@ -144,7 +144,7 @@
     padding: 15px 36px; border-radius: 5px; border: none;
     background: #789DBC; color: #fff;
     font-size: 15px; font-weight: 700; cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
     transition: background 160ms var(--ease-out), transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
     box-shadow: 0 4px 16px rgba(120,157,188,0.3);
   }
@@ -155,7 +155,7 @@
     border: 2px solid #21243D;
     background: transparent; color: #21243D;
     font-size: 15px; font-weight: 700; cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
     transition: background 160ms var(--ease-out), color 160ms var(--ease-out), transform 160ms var(--ease-out);
   }
   .cta-outline:active { transform: scale(0.97); }
@@ -165,9 +165,27 @@
     background: #789DBC; color: #fff;
     text-decoration: none; font-size: 14px; font-weight: 700;
     transition: background 160ms var(--ease-out), transform 160ms var(--ease-out);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
   }
   .resume-btn:active { transform: scale(0.97); }
+
+  .lang-btn {
+    padding: 7px 16px; border-radius: 20px;
+    border: 1.5px solid rgba(33,36,61,0.25);
+    background: transparent; color: #21243D;
+    font-size: 13.5px; font-weight: 700; cursor: pointer;
+    font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
+    transition: border-color 160ms var(--ease-out), color 160ms var(--ease-out), transform 160ms var(--ease-out);
+  }
+  .lang-btn:active { transform: scale(0.95); }
+
+  /* Typewriter cursor */
+  @keyframes cursorBlink { 50% { opacity: 0; } }
+  .type-cursor {
+    animation: cursorBlink 1s steps(1) infinite;
+    font-weight: 400;
+    margin-left: 2px;
+  }
 
   .social-link {
     font-size: 14.5px; color: #637387; font-weight: 600;
@@ -180,7 +198,7 @@
     font-size: 15px; font-weight: 700;
     display: inline-block;
     transition: background 160ms var(--ease-out), color 160ms var(--ease-out), transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
-    text-decoration: none; font-family: 'DM Sans', sans-serif;
+    text-decoration: none; font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
   }
   .contact-btn:active { transform: scale(0.97); }
 
@@ -284,6 +302,7 @@
     .cta-primary:hover { background: #6a8aab; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(120,157,188,0.4); }
     .cta-outline:hover { background: #21243D; color: #fff; }
     .resume-btn:hover { background: #6a8aab; transform: translateY(-1px); }
+    .lang-btn:hover { border-color: #789DBC; color: #789DBC; }
     .social-link:hover { color: #21243D; }
   }
 
@@ -343,13 +362,52 @@ const C = {
   offWhite: "#F9FAFB",
 };
 
+// ─── i18n ─────────────────────────────────────────────────────────────────────
+// Bilingual value: { en: ..., zh: ... }. tx() picks the current language.
+const tx = (v, lang) => (v && typeof v === "object" && !Array.isArray(v) && v.en !== undefined) ? v[lang] : v;
+const trunc = (s, n) => (s && s.length > n ? s.slice(0, n) + "…" : s);
+
+const STR = {
+  en: {
+    resume: "Resume ↓", resumeFile: "master.pdf?v=20260719",
+    hireMe: "Hire Me", viewProjects: "View Projects",
+    aboutLabel: "About", aboutTitle: "Education & Background",
+    featuredLabel: "Featured", featuredTitle: "Highlighted Research & Projects",
+    expLabel: "Experience", expTitle: "Work Experience",
+    workLabel: "Work", workTitle: "More Projects", workHint: "Click any project for the full details.",
+    skillsLabel: "Skills", skillsTitle: "Tools & Technologies",
+    contactLabel: "Contact", contactTitle: "Let's work together",
+    contactBlurb: "I'm actively looking for new opportunities. Whether you have a role in mind, a project to discuss, or just want to say hi — my inbox is always open.",
+    sayHello: "Say Hello ✉️", emailLabel: "Email", phoneLabel: "Phone", locationLabel: "Location",
+    viewDetails: "View details →", achievements: "Achievements", highlights: "Highlights",
+    nav: { about: "About", experience: "Experience", projects: "Projects", skills: "Skills", contact: "Contact" },
+  },
+  zh: {
+    resume: "履歷 ↓", resumeFile: "%E4%B8%AD%E6%96%87%E5%B1%A5%E6%AD%B7.pdf",
+    hireMe: "與我聯絡", viewProjects: "看專案",
+    aboutLabel: "關於", aboutTitle: "教育背景",
+    featuredLabel: "精選", featuredTitle: "研究與專案亮點",
+    expLabel: "經歷", expTitle: "工作經歷",
+    workLabel: "作品", workTitle: "更多專案", workHint: "點擊任一專案查看完整內容。",
+    skillsLabel: "技能", skillsTitle: "工具與技術",
+    contactLabel: "聯絡", contactTitle: "一起合作吧",
+    contactBlurb: "我目前正在積極尋找新機會。無論你有職缺、想討論專案，或只是想打個招呼——歡迎隨時聯繫。",
+    sayHello: "打聲招呼 ✉️", emailLabel: "Email", phoneLabel: "電話", locationLabel: "所在地",
+    viewDetails: "查看詳情 →", achievements: "主要成果", highlights: "亮點",
+    nav: { about: "關於", experience: "經歷", projects: "專案", skills: "技能", contact: "聯絡" },
+  },
+};
+
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const PROFILE = {
-  name:     "Nicole Kuo",
+  name:     { en: "Nicole Kuo", zh: "郭又萓" },
   fullName: "Yu Yi (Nicole) Kuo",
-  greeting: "Hi, I'm",
-  titles:   ["AI Engineer", "Software Engineer", "QA Engineer"],
-  bio:      "CS graduate student and research assistant at Ohio State, working on video-based physiological sensing and AI-powered systems. From RAG-based LLM pipelines to mixed-reality diagnostics — I love tackling problems that sit at the edge of research and engineering.",
+  greeting: { en: "Hi, I'm", zh: "嗨，我是" },
+  titles:   { en: ["Software Engineer", "AI Engineer"], zh: ["軟體工程師", "AI 工程師"] },
+  bio:      {
+    en: "CS graduate student and research assistant at Ohio State, working on video-based physiological sensing and AI-powered systems. From RAG-based LLM pipelines to mixed-reality diagnostics — I love tackling problems that sit at the edge of research and engineering.",
+    zh: "資訊工程碩士，專長深度學習、電腦視覺 (rPPG) 與 LLM／RAG 系統，具備從研究到產品化的完整經驗。熟悉 PyTorch、RAG pipeline、CI/CD 自動化測試與全端開發，擅長將複雜問題轉化為可量化的成果。",
+  },
   location: "Columbus, OH",
   email:    "kuo.382@osu.edu",
   phone:    "(614) 290-4499",
@@ -360,149 +418,250 @@ const PROFILE = {
 
 const EDUCATION = [
   {
-    school:  "The Ohio State University",
-    degree:  "M.S. Computer Science and Engineering",
+    school:  { en: "The Ohio State University", zh: "The Ohio State University" },
+    degree:  { en: "M.S. Computer Science and Engineering", zh: "資訊工程碩士 M.S. CSE" },
     period:  "Aug 2024 – May 2026",
-    location:"Columbus, OH",
-    courses: ["Machine Learning", "Natural Language Processing", "Parallel Computing", "Data Mining", "Computer Architecture"],
+    location:{ en: "Columbus, OH", zh: "美國 Columbus, OH" },
+    courses: {
+      en: ["Machine Learning", "Natural Language Processing", "Parallel Computing", "Data Mining", "Computer Architecture"],
+      zh: ["機器學習", "自然語言處理", "平行計算", "資料探勘", "計算機結構"],
+    },
     icon:    "osu",
     logo:    "osu-buckeyes-logo.svg?v=20260505",
   },
   {
-    school:  "National Ilan University",
-    degree:  "B.E. Computer Science & Information Engineering",
+    school:  { en: "National Ilan University", zh: "國立宜蘭大學" },
+    degree:  { en: "B.E. Computer Science & Information Engineering", zh: "資訊工程學士 B.Eng. CSIE" },
     period:  "Sep 2020 – Jun 2024",
-    location:"Yilan, Taiwan",
-    courses: ["Data Structure", "Algorithms", "Operating Systems", "Software Engineering", "Data Science"],
+    location:{ en: "Yilan, Taiwan", zh: "台灣宜蘭" },
+    courses: {
+      en: ["Data Structure", "Algorithms", "Operating Systems", "Software Engineering", "Data Science"],
+      zh: ["資料結構", "演算法", "作業系統", "軟體工程", "資料科學"],
+    },
     icon:    "niu",
     logo:    "niu-logo.png?v=20260505",
   },
 ];
 
-const SKILLS = {
-  "Languages":    ["Python", "JavaScript", "Go", "SQL", "Bash"],
-  "Frameworks":   ["PyTorch", "TensorFlow", "Hugging Face", "Vue.js", "Pytest", "Allure"],
-  "AI / ML & Data": ["LLM Evaluation", "RAG", "Prompt Engineering", "Vector Search (Milvus, Faiss)", "OpenCV", "MongoDB", "MySQL"],
-  "DevOps & Tools": ["Docker", "Jenkins", "GitLab CI/CD", "Git", "Postman", "Jira", "REST APIs", "WebSocket"],
-};
+const SKILLS = [
+  { label: { en: "Languages", zh: "程式語言" }, items: ["Python", "JavaScript", "Go", "SQL", "Bash"] },
+  { label: { en: "Frameworks", zh: "框架與函式庫" }, items: ["PyTorch", "TensorFlow", "Hugging Face", "Vue.js", "Pytest", "Allure"] },
+  { label: { en: "AI / ML & Data", zh: "AI / ML 與資料" }, items: ["LLM Evaluation", "RAG", "Prompt Engineering", "Vector Search (Milvus, Faiss)", "OpenCV", "MongoDB", "MySQL"] },
+  { label: { en: "DevOps & Tools", zh: "DevOps 與工具" }, items: ["Docker", "Jenkins", "GitLab CI/CD", "Git", "Postman", "Jira", "REST APIs", "WebSocket"] },
+];
 
 const EXPERIENCE = [
   {
-    id: "exp0", role: "Research Assistant", company: "The Ohio State University",
-    period: "Oct 2025 – May 2026", location: "Columbus, OH",
+    id: "exp0", role: { en: "Research Assistant", zh: "研究助理" },
+    company: { en: "The Ohio State University", zh: "The Ohio State University" },
+    period: "Oct 2025 – May 2026", location: { en: "Columbus, OH", zh: "美國 Columbus, OH" },
     emoji: "🫀", color: C.mint, logo: "osu-buckeyes-logo.svg?v=20260505", logoClass: "osu",
-    bullets: [
-      "Developed a PyTorch video-processing pipeline that converts high-motion facial videos into cleaner training samples through frame-by-frame motion replacement and temporal stabilization, processing 438 subject-matched video pairs",
-      "Built a controlled evaluation workflow across CNN, Transformer, and Mamba-based heart-rate estimation models, testing stable, high-motion, and low-quality recordings to compare robustness across 3 architectures",
-      "Improved video-based heart-rate prediction accuracy by up to 67.82% in motion-heavy settings by reducing motion artifacts while preserving subtle pulse-related facial color signals",
-    ],
+    bullets: {
+      en: [
+        "Developed a PyTorch video-processing pipeline that converts high-motion facial videos into cleaner training samples through frame-by-frame motion replacement and temporal stabilization, processing 438 subject-matched video pairs",
+        "Built a controlled evaluation workflow across CNN, Transformer, and Mamba-based heart-rate estimation models, testing stable, high-motion, and low-quality recordings to compare robustness across 3 architectures",
+        "Improved video-based heart-rate prediction accuracy by up to 67.82% in motion-heavy settings by reducing motion artifacts while preserving subtle pulse-related facial color signals",
+      ],
+      zh: [
+        "開發 PyTorch 影像處理 pipeline，透過逐幀動作替換與時序穩定化，把高動態臉部影片轉成更乾淨的訓練樣本",
+        "建立跨 CNN、Transformer、Mamba 三種架構的心率估計評估流程，在穩定／高動態／低品質三種錄影條件下比較模型穩健性",
+        "在高動態情境下將影像心率預測準確度提升最高 67.82%，同時保留脈搏相關的細微臉部色彩訊號",
+      ],
+    },
     tags: ["Python", "PyTorch", "OpenCV", "rPPG", "Video Processing"],
   },
   {
-    id: "exp1", role: "AI Intern", company: "NUWA Robotics",
-    period: "May 2025 – Jun. 2025", location: "Taipei, Taiwan",
+    id: "exp1", role: { en: "AI Intern", zh: "AI 實習生" }, company: "NUWA Robotics",
+    period: "May 2025 – Jun. 2025", location: { en: "Taipei, Taiwan", zh: "台灣台北" },
     emoji: "🤖", color: C.mint, logo: "nuwa-logo.png?v=20260505", logoClass: "nuwa",
-    bullets: [
-      "Optimized an enterprise RAG pipeline with hybrid semantic-keyword retrieval (BGE-M3 + RRF fusion), cross-encoder reranking, keyword filtering, and header-based context merging — improving long-document retrieval quality and resolving production timeout issues",
-      "Built a text-to-MongoDB query module with schema-aware Chain-of-Thought prompting and dynamic few-shot example selection, improving query accuracy by 13% over baseline across 4 prompting strategies",
-      "Benchmarked Cache-Augmented Generation against RAG across 4 model architectures (Qwen2-1.5B, Llama 3.2-1B/3B, Llama 3.1-8B), reducing GPU memory usage by up to 80% as a reference for latency-sensitive architecture decisions",
-    ],
+    bullets: {
+      en: [
+        "Optimized an enterprise RAG pipeline with hybrid semantic-keyword retrieval (BGE-M3 + RRF fusion), cross-encoder reranking, keyword filtering, and header-based context merging — improving long-document retrieval quality and resolving production timeout issues",
+        "Built a text-to-MongoDB query module with schema-aware Chain-of-Thought prompting and dynamic few-shot example selection, improving query accuracy by 13% over baseline across 4 prompting strategies",
+        "Benchmarked Cache-Augmented Generation against RAG across 4 model architectures (Qwen2-1.5B, Llama 3.2-1B/3B, Llama 3.1-8B), reducing GPU memory usage by up to 80% as a reference for latency-sensitive architecture decisions",
+      ],
+      zh: [
+        "優化企業級 RAG pipeline：以 BGE-M3 結合語意＋關鍵字檢索並用 RRF 融合，再加 cross-encoder 重排序、關鍵字過濾與標題式上下文合併，改善長文件檢索品質並解決 production 逾時問題",
+        "建置 text-to-MongoDB 查詢模組，運用 schema-aware CoT prompting 與動態 few-shot 選例，系統性比較 4 種 prompting 策略，查詢準確度較 baseline 提升 13%",
+        "於 4 種模型架構（Qwen2-1.5B、Llama 3.2-1B/3B、Llama 3.1-8B）上比較 Cache-Augmented Generation 與 RAG，GPU 記憶體用量最高降低 80%，作為延遲敏感架構決策的技術參考",
+      ],
+    },
     tags: ["Python", "RAG", "BGE-M3", "Milvus", "MongoDB", "LLM"],
   },
   {
-    id: "exp2", role: "Auto Quality Assurance Intern", company: "BTSE",
-    period: "Jan. 2024 – Jul. 2024", location: "Taipei, Taiwan",
+    id: "exp2", role: { en: "Auto Quality Assurance Intern", zh: "自動化測試實習生" }, company: "BTSE",
+    period: "Jan. 2024 – Jul. 2024", location: { en: "Taipei, Taiwan", zh: "台灣台北" },
     emoji: "🧪", color: C.pink, logo: "btse-logo.svg?v=20260505", logoClass: "btse",
-    bullets: [
-      "Developed Pytest test suites for Futures and Spot trading workflows — liquidation triggers, position-mode switching, margin calculations — expanding regression coverage by 56%",
-      "Extended Jenkins and GitLab CI/CD pipelines with REST API and WebSocket regression scripts as merge-triggered validation gates, reducing release validation time by 58%",
-      "Correlated recurring test failures across releases via Allure reports and Jira defect patterns, surfacing root-cause clusters that cut average defect resolution time by 27% for a 10+-member release team",
-    ],
+    bullets: {
+      en: [
+        "Developed Pytest test suites for Futures and Spot trading workflows — liquidation triggers, position-mode switching, margin calculations — expanding regression coverage by 56%",
+        "Extended Jenkins and GitLab CI/CD pipelines with REST API and WebSocket regression scripts as merge-triggered validation gates, reducing release validation time by 58%",
+        "Correlated recurring test failures across releases via Allure reports and Jira defect patterns, surfacing root-cause clusters that cut average defect resolution time by 27% for a 10+-member release team",
+      ],
+      zh: [
+        "開發 Futures／Spot 交易流程的 Pytest 測試套件，涵蓋強制平倉、倉位模式切換、保證金計算，把手動驗證結構化為可重複的自動化案例，回歸覆蓋率提升 56%",
+        "擴充既有 Jenkins 與 GitLab CI/CD pipeline，加入 REST API 與 WebSocket 回歸腳本作為 merge 觸發驗證關卡，取代人工上線前 smoke check，release 驗證時間縮短 58%",
+        "分析 Allure 報告與 Jira 缺陷模式，找出跨版本重複失敗的根因群集，為 10+ 人 release 團隊將平均缺陷解決時間縮短 27%",
+      ],
+    },
     tags: ["Pytest", "Python", "Jenkins", "GitLab CI/CD", "WebSocket", "Allure"],
   },
   {
-    id: "exp3", role: "Software Engineer Intern", company: "Neten Digital Consultant",
-    period: "Jul. 2023 – Sep. 2023", location: "Yilan, Taiwan",
+    id: "exp3", role: { en: "Software Engineer Intern", zh: "全端工程實習生" }, company: "Neten Digital Consultant",
+    period: "Jul. 2023 – Sep. 2023", location: { en: "Yilan, Taiwan", zh: "台灣宜蘭" },
     emoji: "💻", color: "#E8E8F4", logo: "neten-logo.png?v=20260505", logoClass: "neten",
-    bullets: [
-      "Built a responsive Vue.js frontend for a venue-sharing platform with reusable components, multilingual (i18n) support, and QR-code-driven entry flows — shipping 5 production features that increased user engagement by 29%",
-      "Designed REST APIs in Go with MySQL-backed normalized schemas and indexed lookups, supporting validated authentication flows that reduced average login latency by 20%",
-      "Architected a generic JSON Schema specification with multi-level tree structures to render diverse venue layouts from a single data format, cutting new-venue onboarding effort by 40%",
-    ],
+    bullets: {
+      en: [
+        "Built a responsive Vue.js frontend for a venue-sharing platform with reusable components, multilingual (i18n) support, and QR-code-driven entry flows — shipping 5 production features that increased user engagement by 29%",
+        "Designed REST APIs in Go with MySQL-backed normalized schemas and indexed lookups, supporting validated authentication flows that reduced average login latency by 20%",
+        "Architected a generic JSON Schema specification with multi-level tree structures to render diverse venue layouts from a single data format, cutting new-venue onboarding effort by 40%",
+      ],
+      zh: [
+        "為場地共享平台開發 responsive Vue.js 前端，採可重用元件架構、多語系 (i18n) 與 QR code 入場流程，交付 5 項 production 功能，使用者互動提升 29%",
+        "以 Go 設計 REST API，搭配 MySQL 正規化 schema 與索引查詢處理場地／session／存取控制的階層式資料，支援認證流程，平均登入延遲降低 20%",
+        "設計通用型 JSON Schema 與多層樹狀結構描述多樣場地配置，讓前端以單一格式動態渲染，免除各場地客製頁面，新場地上線工作量減少 40%",
+      ],
+    },
     tags: ["Vue.js", "Go", "MySQL", "i18n", "REST APIs"],
   },
 ];
 
 const FEATURED = [
   {
-    id: "f1", title: "Motion Replacement for Video-Based rPPG",
-    subtitle: "ML Research · The Ohio State University · Oct 2025 – May 2026",
+    id: "f1",
+    title: { en: "Motion Replacement for Video-Based rPPG", zh: "影像式 rPPG 的動作替換前處理" },
+    subtitle: { en: "ML Research · The Ohio State University · Oct 2025 – May 2026", zh: "機器學習研究 · 俄亥俄州立大學 · 2025/10 – 2026/05" },
     tags: ["Python", "PyTorch", "OpenCV", "rPPG", "Video Processing"],
     color: C.mint, emoji: "🫀",
-    description: "A 2-stage video preprocessing pipeline for remote physiological measurement (rPPG) that improves heart-rate estimation in motion-heavy scenarios by replacing high-motion facial frames with lower-motion equivalents while preserving pulse-related color signals.",
-    caseStudy: [
-      {
-        label: "Problem",
-        text: "Remote photoplethysmography (rPPG) estimates heart rate from subtle color changes in facial video — no sensors required. But those color signals are tiny, and head motion easily drowns them out: models that perform well on stable recordings degrade sharply on real-world, motion-heavy video. The goal was to make existing rPPG models robust to motion without retraining them from scratch.",
-      },
-      {
-        label: "Process",
-        bullets: [
-          "Analyzed failure modes by grouping recordings into stable, high-motion, and low-quality conditions to isolate where and why estimation error spikes",
-          "Designed a 2-stage preprocessing pipeline: frame-by-frame motion replacement swaps high-motion facial frames with lower-motion equivalents, then temporal stabilization smooths residual jitter — both tuned to preserve the subtle pulse-related chrominance signal",
-          "Built the pipeline in PyTorch and processed 438 subject-matched video pairs to create controlled clean-vs-noisy training and evaluation sets",
-          "Ran a controlled evaluation across CNN, Transformer, and Mamba-based heart-rate estimation models to verify the gains were architecture-independent",
-        ],
-      },
-      {
-        label: "Results",
-        bullets: [
-          "Improved heart-rate prediction accuracy by up to 67.82% in motion-heavy settings",
-          "Gains held consistently across all 3 model architectures — the preprocessing helps regardless of backbone",
-          "Validated on 2 public datasets (VIPL-HR, MMPD), reaching MAE as low as 3.26 on VIPL-HR",
-        ],
-      },
-      {
-        label: "Learnings",
-        text: "Data quality beats model complexity: a preprocessing step that respects the physics of the signal improved every architecture tested, more than any single model change. Designing the evaluation matrix (conditions × architectures) up front made the results easy to trust and communicate.",
-      },
-    ],
+    description: {
+      en: "A 2-stage video preprocessing pipeline for remote physiological measurement (rPPG) that improves heart-rate estimation in motion-heavy scenarios by replacing high-motion facial frames with lower-motion equivalents while preserving pulse-related color signals.",
+      zh: "針對遠端生理量測（rPPG）設計的兩階段影片前處理 pipeline：以低運動等效幀替換高運動人臉幀並保留脈搏相關色彩訊號，大幅提升高運動場景下的心率估測表現。",
+    },
+    caseStudy: {
+      en: [
+        {
+          label: "Problem",
+          text: "Remote photoplethysmography (rPPG) estimates heart rate from subtle color changes in facial video — no sensors required. But those color signals are tiny, and head motion easily drowns them out: models that perform well on stable recordings degrade sharply on real-world, motion-heavy video. The goal was to make existing rPPG models robust to motion without retraining them from scratch.",
+        },
+        {
+          label: "Process",
+          bullets: [
+            "Analyzed failure modes by grouping recordings into stable, high-motion, and low-quality conditions to isolate where and why estimation error spikes",
+            "Designed a 2-stage preprocessing pipeline: frame-by-frame motion replacement swaps high-motion facial frames with lower-motion equivalents, then temporal stabilization smooths residual jitter — both tuned to preserve the subtle pulse-related chrominance signal",
+            "Built the pipeline in PyTorch and processed 438 subject-matched video pairs to create controlled clean-vs-noisy training and evaluation sets",
+            "Ran a controlled evaluation across CNN, Transformer, and Mamba-based heart-rate estimation models to verify the gains were architecture-independent",
+          ],
+        },
+        {
+          label: "Results",
+          bullets: [
+            "Improved heart-rate prediction accuracy by up to 67.82% in motion-heavy settings",
+            "Gains held consistently across all 3 model architectures — the preprocessing helps regardless of backbone",
+            "Validated on 2 public datasets (VIPL-HR, MMPD), reaching MAE as low as 3.26 on VIPL-HR",
+          ],
+        },
+        {
+          label: "Learnings",
+          text: "Data quality beats model complexity: a preprocessing step that respects the physics of the signal improved every architecture tested, more than any single model change. Designing the evaluation matrix (conditions × architectures) up front made the results easy to trust and communicate.",
+        },
+      ],
+      zh: [
+        {
+          label: "問題",
+          text: "rPPG（遠端光體積變化量測）從臉部影片中細微的顏色變化估測心率，不需任何感測器。但這些訊號極其微弱，頭部運動很容易將其淹沒：在穩定影片上表現良好的模型，一遇到真實世界的高運動影片就急遽退化。目標是在不重新設計模型的前提下，讓現有 rPPG 模型對運動更穩健。",
+        },
+        {
+          label: "方法",
+          bullets: [
+            "將錄影分為穩定、高運動、低品質三種條件分析失效模式，定位估測誤差飆升的位置與原因",
+            "設計兩階段前處理 pipeline：逐幀動作替換以低運動等效幀取代高運動人臉幀，再以時序穩定化消除殘餘抖動——兩者皆以保留脈搏相關色彩訊號為前提調校",
+            "以 PyTorch 實作 pipeline，處理 438 對受試者配對影片，建立乾淨與含噪的對照訓練／評估集",
+            "在 CNN、Transformer、Mamba 三類心率估測模型上進行控制實驗，驗證改善與模型架構無關",
+          ],
+        },
+        {
+          label: "成果",
+          bullets: [
+            "高運動場景下心率預測準確度最高提升 67.82%",
+            "改善在 3 種模型架構上皆一致成立——前處理的效益與 backbone 無關",
+            "於 VIPL-HR 與 MMPD 兩個公開資料集驗證，VIPL-HR 上 MAE 最低達 3.26",
+          ],
+        },
+        {
+          label: "學習",
+          text: "資料品質勝過模型複雜度：一個尊重訊號物理特性的前處理步驟，對所有測試架構的改善都超過任何單一模型調整。事先設計好評估矩陣（條件 × 架構）讓結果更可信、也更容易溝通。",
+        },
+      ],
+    },
     github: "https://github.com/bingbongBB",
     demo: null,
   },
   {
-    id: "f2", title: "AI Recommendation System for FDA Device Safety",
-    subtitle: "AI / NLP · Nov 2025",
+    id: "f2",
+    title: { en: "AI Recommendation System for FDA Device Safety", zh: "FDA 醫療器材安全 AI 推薦系統" },
+    subtitle: { en: "AI / NLP · Nov 2025", zh: "AI / NLP · 2025/11" },
     tags: ["GPT-4", "MeSH", "MedCPT", "Python", "Vector Search"],
     color: C.pink, emoji: "🏥",
-    description: "A recommendation pipeline for 640+ MAUDE FDA publications that uses GPT-4 to enrich MeSH terms and MedCPT similarity search to surface clinically comparable device safety cases — even under sparse metadata.",
-    caseStudy: [
-      {
-        label: "Problem",
-        text: "Medical reviewers investigating FDA device safety reports (MAUDE) need to find clinically comparable prior cases, but the underlying publications have sparse, inconsistent metadata. Keyword search misses related cases due to terminology mismatch, and pure semantic search surfaces superficially similar but clinically irrelevant results.",
-      },
-      {
-        label: "Process",
-        bullets: [
-          "Used GPT-4 to enrich MeSH terms from titles and abstracts, normalizing terminology so publications indexed under different vocabulary become comparable",
-          "Built a two-tier retrieval strategy: MeSH exact-match first for clinical precision, then MedCPT cosine-similarity fallback via vector search to guarantee coverage",
-          "Engineered the fallback to always maintain at least 10 candidates per query, keeping recommendations useful even for publications with minimal metadata",
-          "Designed a structured evaluation protocol with defined relevance criteria rather than ad-hoc judgment",
-        ],
-      },
-      {
-        label: "Results",
-        bullets: [
-          "Validation pipeline covering 640+ MAUDE publications",
-          "Maintained ≥10 candidates under sparse metadata, improving robustness of related-case discovery in sparse literature settings",
-          "Top-5 ranking quality validated by 2 domain raters across 60 source papers using structured evaluation criteria",
-        ],
-      },
-      {
-        label: "Learnings",
-        text: "In high-stakes domains, hybrid retrieval (exact-match precision + semantic recall) outperforms either approach alone. Investing in a structured human evaluation protocol early made it possible to compare pipeline variants objectively instead of by intuition.",
-      },
-    ],
+    description: {
+      en: "A recommendation pipeline for 640+ MAUDE FDA publications that uses GPT-4 to enrich MeSH terms and MedCPT similarity search to surface clinically comparable device safety cases — even under sparse metadata.",
+      zh: "為 640+ 篇 MAUDE FDA 文獻打造的推薦 pipeline：以 GPT-4 擴充 MeSH 詞彙、MedCPT 相似度檢索，即使在 metadata 稀疏的情況下也能找出臨床上可比較的器材安全案例。",
+    },
+    caseStudy: {
+      en: [
+        {
+          label: "Problem",
+          text: "Medical reviewers investigating FDA device safety reports (MAUDE) need to find clinically comparable prior cases, but the underlying publications have sparse, inconsistent metadata. Keyword search misses related cases due to terminology mismatch, and pure semantic search surfaces superficially similar but clinically irrelevant results.",
+        },
+        {
+          label: "Process",
+          bullets: [
+            "Used GPT-4 to enrich MeSH terms from titles and abstracts, normalizing terminology so publications indexed under different vocabulary become comparable",
+            "Built a two-tier retrieval strategy: MeSH exact-match first for clinical precision, then MedCPT cosine-similarity fallback via vector search to guarantee coverage",
+            "Engineered the fallback to always maintain at least 10 candidates per query, keeping recommendations useful even for publications with minimal metadata",
+            "Designed a structured evaluation protocol with defined relevance criteria rather than ad-hoc judgment",
+          ],
+        },
+        {
+          label: "Results",
+          bullets: [
+            "Validation pipeline covering 640+ MAUDE publications",
+            "Maintained ≥10 candidates under sparse metadata, improving robustness of related-case discovery in sparse literature settings",
+            "Top-5 ranking quality validated by 2 domain raters across 60 source papers using structured evaluation criteria",
+          ],
+        },
+        {
+          label: "Learnings",
+          text: "In high-stakes domains, hybrid retrieval (exact-match precision + semantic recall) outperforms either approach alone. Investing in a structured human evaluation protocol early made it possible to compare pipeline variants objectively instead of by intuition.",
+        },
+      ],
+      zh: [
+        {
+          label: "問題",
+          text: "審查 FDA 器材安全報告（MAUDE）的醫療審查者需要找出臨床上可比較的先前案例，但底層文獻的 metadata 稀疏且不一致。關鍵字搜尋因術語不一致而漏掉相關案例，純語意搜尋則會撈出表面相似但臨床上無關的結果。",
+        },
+        {
+          label: "方法",
+          bullets: [
+            "以 GPT-4 從標題與摘要擴充 MeSH 詞彙，統一術語，使以不同詞彙索引的文獻可以互相比較",
+            "建立兩層檢索策略：先以 MeSH 精確比對確保臨床精準度，再以 MedCPT 餘弦相似度向量檢索作為後備確保涵蓋率",
+            "後備機制設計為每次查詢至少維持 10 筆候選，讓 metadata 極少的文獻也能得到有用的推薦",
+            "設計含明確相關性準則的結構化評估流程，而非仰賴主觀判斷",
+          ],
+        },
+        {
+          label: "成果",
+          bullets: [
+            "驗證 pipeline 涵蓋 640+ 篇 MAUDE 文獻",
+            "稀疏 metadata 下維持 ≥10 筆候選，提升稀疏文獻情境的相關案例探索穩健性",
+            "由 2 位領域評分者以結構化準則在 60 篇來源文獻上驗證 top-5 排序品質",
+          ],
+        },
+        {
+          label: "學習",
+          text: "在高風險領域，混合檢索（精確比對的精準度 + 語意檢索的召回率）優於任一單獨方法。及早投資結構化的人工評估流程，讓 pipeline 變體可以被客觀比較，而非憑直覺。",
+        },
+      ],
+    },
     github: "https://github.com/bingbongBB",
     demo: null,
   },
@@ -510,30 +669,52 @@ const FEATURED = [
 
 const PROJECTS = [
   {
-    id: "p1", title: "Political Impersonation Detection",
-    subtitle: "Taiwanese Social Media Analysis · Apr 2025",
+    id: "p1",
+    title: { en: "Political Impersonation Detection", zh: "政治冒充貼文偵測" },
+    subtitle: { en: "Taiwanese Social Media Analysis · Apr 2025", zh: "台灣社群媒體分析 · 2025/04" },
     tags: ["LLM", "Gemini API", "Python", "NLP", "Few-Shot Prompting"],
     emoji: "🕵️", year: "2025",
-    description: "Detected political trolling with 75% accuracy across 1000+ Taiwanese social media posts using a Gemini-powered pipeline with weighted feature analysis and exponential-backoff retry logic.",
-    highlights: [
-      "Achieved 75% detection accuracy across 1000+ social media posts",
-      "Raised detection precision from 32% to 80% via zero-shot, contextual, and few-shot prompting strategies",
-      "Built hybrid detection combining Gemini API prompting and weighted feature analysis",
-    ],
+    description: {
+      en: "Detected political trolling with 75% accuracy across 1000+ Taiwanese social media posts using a Gemini-powered pipeline with weighted feature analysis and exponential-backoff retry logic.",
+      zh: "以 Gemini 驅動的 pipeline 搭配加權特徵分析與指數退避重試機制，在 1000+ 篇台灣社群媒體貼文上以 75% 準確率偵測政治操作貼文。",
+    },
+    highlights: {
+      en: [
+        "Achieved 75% detection accuracy across 1000+ social media posts",
+        "Raised detection precision from 32% to 80% via zero-shot, contextual, and few-shot prompting strategies",
+        "Built hybrid detection combining Gemini API prompting and weighted feature analysis",
+      ],
+      zh: [
+        "在 1000+ 篇社群貼文上達到 75% 偵測準確率",
+        "透過 zero-shot、情境與 few-shot 提示策略，將偵測精準度從 32% 提升至 80%",
+        "建立結合 Gemini API 提示與加權特徵分析的混合偵測方法",
+      ],
+    },
     github: "https://github.com/bingbongBB",
     demo: null,
   },
   {
-    id: "p2", title: "Breast Cancer Detection with Mixed Reality",
-    subtitle: "Computer Vision · Mar 2024",
+    id: "p2",
+    title: { en: "Breast Cancer Detection with Mixed Reality", zh: "混合實境乳癌偵測輔助系統" },
+    subtitle: { en: "Computer Vision · Mar 2024", zh: "電腦視覺 · 2024/03" },
     tags: ["EfficientNetB7", "OpenCV", "HoloLens 2", "PyTorch", "CBIS-DDSM"],
     emoji: "🔬", year: "2024",
-    description: "An assistive diagnostic system for mammography review using a CNN ensemble on CBIS-DDSM data, delivered through a hands-free mixed-reality interface on HoloLens 2.",
-    highlights: [
-      "Achieved 70% calcification classification accuracy with EfficientNetB7",
-      "Benchmarked 6 CNN backbones with histogram equalization and augmentation",
-      "Delivered 4 contour metrics via hands-free HoloLens 2 interface",
-    ],
+    description: {
+      en: "An assistive diagnostic system for mammography review using a CNN ensemble on CBIS-DDSM data, delivered through a hands-free mixed-reality interface on HoloLens 2.",
+      zh: "以 CNN 於 CBIS-DDSM 資料集建立乳房攝影輔助診斷系統，並透過 HoloLens 2 提供免手持混合實境介面。",
+    },
+    highlights: {
+      en: [
+        "Achieved 70% calcification classification accuracy with EfficientNetB7",
+        "Benchmarked 6 CNN backbones with histogram equalization and augmentation",
+        "Delivered 4 contour metrics via hands-free HoloLens 2 interface",
+      ],
+      zh: [
+        "以 EfficientNetB7 達到 70% 鈣化點分類準確率",
+        "以直方圖等化、OpenCV 前處理與資料增強評測 6 種 CNN backbone",
+        "透過免手持 HoloLens 2 介面呈現 4 項輪廓指標",
+      ],
+    },
     github: "https://github.com/bingbongBB",
     demo: null,
   },
@@ -572,11 +753,37 @@ function Tag({ label, dark }) {
   return <span className={`tag${dark ? " dark" : ""}`}>{label}</span>;
 }
 
+function Typewriter({ words }) {
+  const [idx, setIdx] = useState(0);
+  const [len, setLen] = useState(0);
+  const [deleting, setDeleting] = useState(false);
+
+  // Reset when the word list changes (e.g. language toggle)
+  useEffect(() => { setIdx(0); setLen(0); setDeleting(false); }, [words]);
+
+  useEffect(() => {
+    const word = words[idx % words.length];
+    let delay = deleting ? 45 : 95;                    // deleting is faster than typing
+    if (!deleting && len === word.length) delay = 1800; // pause on the full word
+    else if (deleting && len === 0) delay = 400;        // brief pause before next word
+    const tmo = setTimeout(() => {
+      if (!deleting && len === word.length) setDeleting(true);
+      else if (deleting && len === 0) { setDeleting(false); setIdx(i => (i + 1) % words.length); }
+      else setLen(l => l + (deleting ? -1 : 1));
+    }, delay);
+    return () => clearTimeout(tmo);
+  }, [len, deleting, idx, words]);
+
+  const word = words[idx % words.length];
+  return <span>{word.slice(0, len)}<span className="type-cursor">|</span></span>;
+}
+
 function SchoolIcon({ edu }) {
+  const name = tx(edu.school, "en");
   if (edu.logo) {
     return (
-      <div className={`school-icon ${edu.icon ? `${edu.icon}-icon` : ""}`} title={edu.school}>
-        <img src={edu.logo} alt={`${edu.school} logo`} />
+      <div className={`school-icon ${edu.icon ? `${edu.icon}-icon` : ""}`} title={name}>
+        <img src={edu.logo} alt={`${name} logo`} />
       </div>
     );
   }
@@ -585,10 +792,11 @@ function SchoolIcon({ edu }) {
 }
 
 function ItemIcon({ item, modal = false }) {
+  const name = tx(item.company || item.title, "en");
   if (item.logo) {
     return (
-      <div className={`brand-icon ${item.logoClass || ""} ${modal ? "modal-icon" : ""}`} title={item.company || item.title}>
-        <img src={item.logo} alt={`${item.company || item.title} logo`} />
+      <div className={`brand-icon ${item.logoClass || ""} ${modal ? "modal-icon" : ""}`} title={name}>
+        <img src={item.logo} alt={`${name} logo`} />
       </div>
     );
   }
@@ -611,7 +819,7 @@ function ItemIcon({ item, modal = false }) {
   );
 }
 
-function Modal({ item, onClose }) {
+function Modal({ item, lang, S, onClose }) {
   useEffect(() => {
     const h = e => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", h);
@@ -619,21 +827,22 @@ function Modal({ item, onClose }) {
     return () => { window.removeEventListener("keydown", h); document.body.style.overflow = ""; };
   }, [onClose]);
 
-  const bullets = item.bullets || item.highlights || [];
+  const bullets = tx(item.bullets || item.highlights, lang) || [];
   const tags = item.tags || [];
+  const cs = item.caseStudy ? item.caseStudy[lang] : null;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-box" onClick={e => e.stopPropagation()}>
-        <button onClick={onClose} style={{ position: "absolute", top: 14, right: 14, background: "rgba(33,36,61,0.07)", border: "none", borderRadius: 8, width: 36, height: 36, cursor: "pointer", fontSize: 22, color: C.navy, lineHeight: 1, fontFamily: "'DM Sans',sans-serif" }}>×</button>
+        <button onClick={onClose} style={{ position: "absolute", top: 14, right: 14, background: "rgba(33,36,61,0.07)", border: "none", borderRadius: 8, width: 36, height: 36, cursor: "pointer", fontSize: 22, color: C.navy, lineHeight: 1, fontFamily: "'DM Sans','Noto Sans TC',sans-serif" }}>×</button>
         <ItemIcon item={item} modal />
-        <h2 style={{ margin: "0 0 3px", fontSize: 26, fontWeight: 800, color: C.navy, letterSpacing: "0" }}>{item.title || item.role}</h2>
-        {(item.subtitle || item.company) && <p style={{ margin: "0 0 5px", fontSize: 16, color: C.blue, fontWeight: 600 }}>{item.subtitle || item.company}</p>}
-        {item.period && <p style={{ margin: "0 0 18px", fontSize: 14.5, color: C.gray }}>{item.period}{item.location ? ` · ${item.location}` : ""}</p>}
+        <h2 style={{ margin: "0 0 3px", fontSize: 26, fontWeight: 800, color: C.navy, letterSpacing: "0" }}>{tx(item.title || item.role, lang)}</h2>
+        {(item.subtitle || item.company) && <p style={{ margin: "0 0 5px", fontSize: 16, color: C.blue, fontWeight: 600 }}>{tx(item.subtitle || item.company, lang)}</p>}
+        {item.period && <p style={{ margin: "0 0 18px", fontSize: 14.5, color: C.gray }}>{item.period}{item.location ? ` · ${tx(item.location, lang)}` : ""}</p>}
         <div style={{ marginBottom: 18 }}>{tags.map(t => <Tag key={t} label={t} />)}</div>
-        {item.description && <p style={{ fontSize: 16.5, color: C.navy, lineHeight: 1.65, margin: "0 0 22px", opacity: 0.86 }}>{item.description}</p>}
-        {item.caseStudy ? (
-          item.caseStudy.map(sec => (
+        {item.description && <p style={{ fontSize: 16.5, color: C.navy, lineHeight: 1.65, margin: "0 0 22px", opacity: 0.86 }}>{tx(item.description, lang)}</p>}
+        {cs ? (
+          cs.map(sec => (
             <div key={sec.label} style={{ marginBottom: 22 }}>
               <h4 style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.08em" }}>{sec.label}</h4>
               {sec.text && <p style={{ margin: 0, fontSize: 15.5, color: C.navy, lineHeight: 1.65, opacity: 0.86 }}>{sec.text}</p>}
@@ -646,7 +855,7 @@ function Modal({ item, onClose }) {
           ))
         ) : bullets.length > 0 && (
           <>
-            <h4 style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.08em" }}>{item.bullets ? "Achievements" : "Highlights"}</h4>
+            <h4 style={{ margin: "0 0 10px", fontSize: 13, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.08em" }}>{item.bullets ? S.achievements : S.highlights}</h4>
             <ul style={{ margin: 0, paddingLeft: 20, display: "flex", flexDirection: "column", gap: 8 }}>
               {bullets.map((b, i) => <li key={i} style={{ fontSize: 15.5, color: C.navy, lineHeight: 1.65, opacity: 0.86 }}>{b}</li>)}
             </ul>
@@ -665,8 +874,20 @@ function Modal({ item, onClose }) {
 function Portfolio() {
   const [selected, setSelected] = useState(null);
   const [navScrolled, setNavScrolled] = useState(false);
-  const heroTitle = PROFILE.titles[1] || PROFILE.titles[0];
+  const [lang, setLang] = useState(() => {
+    try {
+      return localStorage.getItem("lang") || (navigator.language && navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en");
+    } catch (e) { return "en"; }
+  });
+  const S = STR[lang];
+  const titles = tx(PROFILE.titles, lang);
   useReveal();
+
+  useEffect(() => {
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+    document.documentElement.lang = lang === "zh" ? "zh-Hant" : "en";
+    document.title = lang === "zh" ? "Nicole 的作品集" : "Nicole's Portfolio";
+  }, [lang]);
 
   useEffect(() => {
     // Scroll progress
@@ -689,26 +910,31 @@ function Portfolio() {
   };
 
   const navLinks = [
-    { label: "About",      id: "about" },
-    { label: "Experience", id: "experience" },
-    { label: "Projects",   id: "projects" },
-    { label: "Skills",     id: "skills" },
-    { label: "Contact",    id: "contact" },
+    { label: S.nav.about,      id: "about" },
+    { label: S.nav.experience, id: "experience" },
+    { label: S.nav.projects,   id: "projects" },
+    { label: S.nav.skills,     id: "skills" },
+    { label: S.nav.contact,    id: "contact" },
   ];
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", color: C.navy, background: C.white, minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'DM Sans', 'Noto Sans TC', sans-serif", color: C.navy, background: C.white, minHeight: "100vh" }}>
 
       {/* NAVBAR */}
       <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, background: navScrolled ? "rgba(255,255,255,0.92)" : "transparent", backdropFilter: navScrolled ? "blur(14px)" : "none", boxShadow: navScrolled ? "0 1px 24px rgba(33,36,61,0.08)" : "none", transition: "background 180ms cubic-bezier(0.23,1,0.32,1), box-shadow 180ms cubic-bezier(0.23,1,0.32,1), backdrop-filter 180ms cubic-bezier(0.23,1,0.32,1)", padding: "0 clamp(28px,5vw,88px)", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ fontWeight: 900, fontSize: 21, color: C.navy, cursor: "pointer", letterSpacing: "0" }}>
           Nicole<span style={{ color: C.blue }}>.</span>
         </span>
-        <div className="nav-links" style={{ display: "flex", gap: 36, alignItems: "center" }}>
-          {navLinks.map(l => (
-            <button key={l.id} className="nav-btn" onClick={() => scrollTo(l.id)}>{l.label}</button>
-          ))}
-          <a href="master.pdf?v=20260719" download className="resume-btn">Resume ↓</a>
+        <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+          <div className="nav-links" style={{ display: "flex", gap: 36, alignItems: "center" }}>
+            {navLinks.map(l => (
+              <button key={l.id} className="nav-btn" onClick={() => scrollTo(l.id)}>{l.label}</button>
+            ))}
+            <a href={S.resumeFile} download className="resume-btn">{S.resume}</a>
+          </div>
+          <button className="lang-btn" onClick={() => setLang(lang === "en" ? "zh" : "en")} title={lang === "en" ? "切換至中文" : "Switch to English"}>
+            {lang === "en" ? "中文" : "EN"}
+          </button>
         </div>
       </nav>
 
@@ -721,17 +947,17 @@ function Portfolio() {
         <div className="hero-inner" style={{ maxWidth: 1280, margin: "0 auto", width: "100%", display: "flex", alignItems: "center", gap: 64, position: "relative", zIndex: 1 }}>
           {/* Left */}
           <div style={{ flex: "1 1 620px" }}>
-            <p className="hero-in hero-in-1" style={{ margin: "0 0 10px", fontSize: 16, color: C.blue, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>{PROFILE.greeting}</p>
+            <p className="hero-in hero-in-1" style={{ margin: "0 0 10px", fontSize: 16, color: C.blue, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase" }}>{tx(PROFILE.greeting, lang)}</p>
             <h1 className="hero-name hero-in hero-in-2" style={{ margin: "0 0 10px", fontSize: 68, fontWeight: 900, color: C.navy, lineHeight: 1.02, letterSpacing: "0" }}>
-              {PROFILE.name}
+              {tx(PROFILE.name, lang)}
             </h1>
-            <div className="hero-in hero-in-3" style={{ margin: "0 0 22px", fontSize: 28, color: C.blue, fontWeight: 600, minHeight: "1.4em", fontFamily: "'DM Mono', monospace" }}>
-              {heroTitle}
+            <div className="hero-in hero-in-3" style={{ margin: "0 0 22px", fontSize: 28, color: C.blue, fontWeight: 600, minHeight: "1.4em", fontFamily: "'DM Mono', 'Noto Sans TC', monospace" }}>
+              <Typewriter words={titles} />
             </div>
-            <p className="hero-in hero-in-3" style={{ margin: "0 0 30px", fontSize: 17, color: C.navy, lineHeight: 1.72, maxWidth: 600, opacity: 0.76 }}>{PROFILE.bio}</p>
+            <p className="hero-in hero-in-3" style={{ margin: "0 0 30px", fontSize: 17, color: C.navy, lineHeight: 1.72, maxWidth: 600, opacity: 0.76 }}>{tx(PROFILE.bio, lang)}</p>
             <div className="hero-cta hero-in hero-in-4" style={{ display: "flex", gap: 16, marginBottom: 28, flexWrap: "wrap" }}>
-              <button className="cta-primary" onClick={() => scrollTo("contact")}>Hire Me</button>
-              <button className="cta-outline" onClick={() => scrollTo("projects")}>View Projects</button>
+              <button className="cta-primary" onClick={() => scrollTo("contact")}>{S.hireMe}</button>
+              <button className="cta-outline" onClick={() => scrollTo("projects")}>{S.viewProjects}</button>
             </div>
             <div className="hero-social hero-in hero-in-5" style={{ display: "flex", gap: 28 }}>
               {[{ label: "GitHub ↗", href: PROFILE.github }, { label: "LinkedIn ↗", href: PROFILE.linkedin }, { label: "Email ↗", href: `mailto:${PROFILE.email}` }].map(s => (
@@ -747,16 +973,16 @@ function Portfolio() {
       {/* ABOUT */}
       <section id="about" style={{ padding: "64px 0", background: C.offWhite }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
-          <p className="sec-label reveal">About</p>
-          <h2 className="sec-title reveal reveal-delay-1">Education & Background</h2>
+          <p className="sec-label reveal">{S.aboutLabel}</p>
+          <h2 className="sec-title reveal reveal-delay-1">{S.aboutTitle}</h2>
           <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
             {EDUCATION.map((edu, i) => (
-              <div key={edu.school} className={`reveal reveal-delay-${i + 1}`} style={{ flex: "1 1 360px", background: C.white, borderRadius: 8, padding: 30, boxShadow: "0 2px 16px rgba(33,36,61,0.07)" }}>
+              <div key={edu.icon} className={`reveal reveal-delay-${i + 1}`} style={{ flex: "1 1 360px", background: C.white, borderRadius: 8, padding: 30, boxShadow: "0 2px 16px rgba(33,36,61,0.07)" }}>
                 <SchoolIcon edu={edu} />
-                <h3 style={{ margin: "0 0 5px", fontSize: 24, fontWeight: 800, color: C.navy }}>{edu.school}</h3>
-                <p style={{ margin: "0 0 5px", fontSize: 17, color: C.blue, fontWeight: 600 }}>{edu.degree}</p>
-                <p style={{ margin: "0 0 16px", fontSize: 15.5, color: C.gray }}>{edu.period} · {edu.location}</p>
-                <div>{edu.courses.map(c => <Tag key={c} label={c} />)}</div>
+                <h3 style={{ margin: "0 0 5px", fontSize: 24, fontWeight: 800, color: C.navy }}>{tx(edu.school, lang)}</h3>
+                <p style={{ margin: "0 0 5px", fontSize: 17, color: C.blue, fontWeight: 600 }}>{tx(edu.degree, lang)}</p>
+                <p style={{ margin: "0 0 16px", fontSize: 15.5, color: C.gray }}>{edu.period} · {tx(edu.location, lang)}</p>
+                <div>{tx(edu.courses, lang).map(c => <Tag key={c} label={c} />)}</div>
               </div>
             ))}
           </div>
@@ -766,17 +992,17 @@ function Portfolio() {
       {/* FEATURED */}
       <section style={{ background: C.pink, padding: "64px 0" }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
-          <p className="sec-label reveal">Featured</p>
-          <h2 className="sec-title reveal reveal-delay-1">Highlighted Research & Projects</h2>
+          <p className="sec-label reveal">{S.featuredLabel}</p>
+          <h2 className="sec-title reveal reveal-delay-1">{S.featuredTitle}</h2>
           <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
             {FEATURED.map((p, i) => (
               <div key={p.id} className={`featured-card reveal reveal-delay-${i + 1}`} onClick={() => setSelected(p)}>
                 <div style={{ width: 62, height: 62, borderRadius: 12, background: p.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, marginBottom: 18 }}>{p.emoji}</div>
-                <h3 style={{ margin: "0 0 5px", fontSize: 20, fontWeight: 700, color: C.navy }}>{p.title}</h3>
-                <p style={{ margin: "0 0 14px", fontSize: 13.5, color: C.gray }}>{p.subtitle}</p>
-                <p style={{ margin: "0 0 16px", fontSize: 15.5, color: C.navy, lineHeight: 1.58, opacity: 0.8 }}>{p.description.slice(0, 150)}…</p>
+                <h3 style={{ margin: "0 0 5px", fontSize: 20, fontWeight: 700, color: C.navy }}>{tx(p.title, lang)}</h3>
+                <p style={{ margin: "0 0 14px", fontSize: 13.5, color: C.gray }}>{tx(p.subtitle, lang)}</p>
+                <p style={{ margin: "0 0 16px", fontSize: 15.5, color: C.navy, lineHeight: 1.58, opacity: 0.8 }}>{trunc(tx(p.description, lang), lang === "zh" ? 75 : 150)}</p>
                 <div>{p.tags.map(t => <Tag key={t} label={t} />)}</div>
-                <div style={{ marginTop: 18, fontSize: 14.5, color: C.blue, fontWeight: 700 }}>View details →</div>
+                <div style={{ marginTop: 18, fontSize: 14.5, color: C.blue, fontWeight: 700 }}>{S.viewDetails}</div>
               </div>
             ))}
           </div>
@@ -786,8 +1012,8 @@ function Portfolio() {
       {/* EXPERIENCE */}
       <section id="experience" style={{ padding: "64px 0", background: C.white }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
-          <p className="sec-label reveal">Experience</p>
-          <h2 className="sec-title reveal reveal-delay-1">Work Experience</h2>
+          <p className="sec-label reveal">{S.expLabel}</p>
+          <h2 className="sec-title reveal reveal-delay-1">{S.expTitle}</h2>
           <div>
             {EXPERIENCE.map((exp, i) => (
               <div key={exp.id} className={`exp-row reveal reveal-delay-${i + 1}`} onClick={() => setSelected(exp)}>
@@ -795,15 +1021,15 @@ function Portfolio() {
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4, gap: 12 }}>
                     <div>
-                      <h3 style={{ margin: 0, fontSize: 19, fontWeight: 700, color: C.navy }}>{exp.role}</h3>
-                      <p style={{ margin: "3px 0 0", fontSize: 15.5, color: C.blue, fontWeight: 600 }}>{exp.company}</p>
+                      <h3 style={{ margin: 0, fontSize: 19, fontWeight: 700, color: C.navy }}>{tx(exp.role, lang)}</h3>
+                      <p style={{ margin: "3px 0 0", fontSize: 15.5, color: C.blue, fontWeight: 600 }}>{tx(exp.company, lang)}</p>
                     </div>
                     <div style={{ textAlign: "right", flexShrink: 0 }}>
                       <p style={{ margin: 0, fontSize: 13.5, color: C.gray }}>{exp.period}</p>
-                      <p style={{ margin: "3px 0 0", fontSize: 13.5, color: C.gray }}>{exp.location}</p>
+                      <p style={{ margin: "3px 0 0", fontSize: 13.5, color: C.gray }}>{tx(exp.location, lang)}</p>
                     </div>
                   </div>
-                  <p style={{ margin: "12px 0", fontSize: 15.5, color: C.navy, opacity: 0.78, lineHeight: 1.55 }}>{exp.bullets[0]}</p>
+                  <p style={{ margin: "12px 0", fontSize: 15.5, color: C.navy, opacity: 0.78, lineHeight: 1.55 }}>{tx(exp.bullets, lang)[0]}</p>
                   <div>{exp.tags.map(t => <Tag key={t} label={t} dark />)}</div>
                 </div>
                 <div style={{ fontSize: 24, color: C.gray, alignSelf: "center" }}>›</div>
@@ -816,19 +1042,19 @@ function Portfolio() {
       {/* MORE PROJECTS */}
       <section id="projects" style={{ padding: "64px 0", background: C.offWhite }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
-          <p className="sec-label reveal">Work</p>
-          <h2 className="sec-title reveal reveal-delay-1">More Projects</h2>
-          <p className="reveal reveal-delay-1" style={{ margin: "-14px 0 24px", fontSize: 15.5, color: C.gray }}>Click any project for the full details.</p>
+          <p className="sec-label reveal">{S.workLabel}</p>
+          <h2 className="sec-title reveal reveal-delay-1">{S.workTitle}</h2>
+          <p className="reveal reveal-delay-1" style={{ margin: "-14px 0 24px", fontSize: 15.5, color: C.gray }}>{S.workHint}</p>
           <div>
             {PROJECTS.map((p, i) => (
               <div key={p.id} className={`proj-row reveal reveal-delay-${i + 1}`} onClick={() => setSelected(p)} style={{ borderBottom: i < PROJECTS.length - 1 ? "1px solid rgba(33,36,61,0.08)" : "none" }}>
                 <div style={{ width: 62, height: 62, flexShrink: 0, borderRadius: 12, background: C.white, border: "1px solid rgba(33,36,61,0.09)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30 }}>{p.emoji}</div>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
-                    <h3 style={{ margin: 0, fontSize: 19, fontWeight: 700, color: C.navy }}>{p.title}</h3>
+                    <h3 style={{ margin: 0, fontSize: 19, fontWeight: 700, color: C.navy }}>{tx(p.title, lang)}</h3>
                     <span style={{ fontSize: 13.5, color: C.gray }}>{p.year}</span>
                   </div>
-                  <p style={{ margin: "0 0 12px", fontSize: 15.5, color: C.gray, lineHeight: 1.55 }}>{p.description.slice(0, 165)}…</p>
+                  <p style={{ margin: "0 0 12px", fontSize: 15.5, color: C.gray, lineHeight: 1.55 }}>{trunc(tx(p.description, lang), lang === "zh" ? 82 : 165)}</p>
                   <div>{p.tags.map(t => <Tag key={t} label={t} dark />)}</div>
                 </div>
                 <div style={{ fontSize: 24, color: C.gray, alignSelf: "center" }}>›</div>
@@ -841,13 +1067,13 @@ function Portfolio() {
       {/* SKILLS */}
       <section id="skills" style={{ padding: "64px 0", background: C.white }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
-          <p className="sec-label reveal">Skills</p>
-          <h2 className="sec-title reveal reveal-delay-1">Tools & Technologies</h2>
+          <p className="sec-label reveal">{S.skillsLabel}</p>
+          <h2 className="sec-title reveal reveal-delay-1">{S.skillsTitle}</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 34 }}>
-            {Object.entries(SKILLS).map(([cat, items], ci) => (
-              <div key={cat} className={`reveal reveal-delay-${ci + 1}`}>
-                <h4 style={{ margin: "0 0 14px", fontSize: 13, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.12em" }}>{cat}</h4>
-                {items.map(s => (
+            {SKILLS.map((cat, ci) => (
+              <div key={cat.label.en} className={`reveal reveal-delay-${ci + 1}`}>
+                <h4 style={{ margin: "0 0 14px", fontSize: 13, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.12em" }}>{tx(cat.label, lang)}</h4>
+                {cat.items.map(s => (
                   <div key={s} className="skill-item" style={{ fontSize: 15.5, color: C.navy, padding: "10px 0", borderBottom: "1px solid rgba(33,36,61,0.07)", display: "flex", alignItems: "center", gap: 12, transition: "color 0.2s" }}>
                     <span className="skill-dot" />
                     {s}
@@ -862,16 +1088,16 @@ function Portfolio() {
       {/* CONTACT */}
       <section id="contact" style={{ background: C.pink, padding: "64px 0" }}>
         <div className="sec-inner" style={{ maxWidth: 1280, margin: "0 auto", padding: "0 clamp(28px,5vw,88px)" }}>
-          <p className="sec-label reveal">Contact</p>
-          <h2 className="sec-title reveal reveal-delay-1">Let's work together</h2>
+          <p className="sec-label reveal">{S.contactLabel}</p>
+          <h2 className="sec-title reveal reveal-delay-1">{S.contactTitle}</h2>
           <p className="reveal reveal-delay-2" style={{ margin: "-14px 0 30px", fontSize: 17, color: C.navy, opacity: 0.76, maxWidth: 620, lineHeight: 1.65 }}>
-            I'm actively looking for new opportunities. Whether you have a role in mind, a project to discuss, or just want to say hi — my inbox is always open.
+            {S.contactBlurb}
           </p>
           <div className="reveal reveal-delay-3" style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
             {[
-              { label: "Say Hello ✉️", href: `mailto:${PROFILE.email}`, filled: true },
-              { label: "LinkedIn ↗",   href: PROFILE.linkedin,           filled: false },
-              { label: "GitHub ↗",     href: PROFILE.github,             filled: false },
+              { label: S.sayHello,    href: `mailto:${PROFILE.email}`, filled: true },
+              { label: "LinkedIn ↗",  href: PROFILE.linkedin,          filled: false },
+              { label: "GitHub ↗",    href: PROFILE.github,            filled: false },
             ].map(btn => (
               <a key={btn.label} href={btn.href} target="_blank" rel="noreferrer"
                 className="contact-btn"
@@ -891,9 +1117,9 @@ function Portfolio() {
           {/* Contact info */}
           <div className="reveal reveal-delay-4" style={{ marginTop: 40, display: "flex", gap: 40, flexWrap: "wrap" }}>
             {[
-              { label: "Email", value: PROFILE.email, href: `mailto:${PROFILE.email}` },
-              { label: "Phone", value: PROFILE.phone, href: `tel:${PROFILE.phone}` },
-              { label: "Location", value: PROFILE.location, href: null },
+              { label: S.emailLabel, value: PROFILE.email, href: `mailto:${PROFILE.email}` },
+              { label: S.phoneLabel, value: PROFILE.phone, href: `tel:${PROFILE.phone}` },
+              { label: S.locationLabel, value: PROFILE.location, href: null },
             ].map(info => (
               <div key={info.label}>
                 <p style={{ margin: "0 0 5px", fontSize: 12, fontWeight: 700, color: C.blue, textTransform: "uppercase", letterSpacing: "0.1em" }}>{info.label}</p>
@@ -916,7 +1142,7 @@ function Portfolio() {
         <div className="footer-links" style={{ display: "flex", gap: 30 }}>
           {navLinks.map(l => (
             <button key={l.id} onClick={() => scrollTo(l.id)}
-              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 14, color: "rgba(255,255,255,0.5)", padding: 0, fontFamily: "'DM Sans',sans-serif", transition: "color 0.2s" }}
+              style={{ background: "none", border: "none", cursor: "pointer", fontSize: 14, color: "rgba(255,255,255,0.5)", padding: 0, fontFamily: "'DM Sans','Noto Sans TC',sans-serif", transition: "color 0.2s" }}
               onMouseEnter={e => e.currentTarget.style.color = C.white}
               onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.5)"}
             >{l.label}</button>
@@ -924,7 +1150,7 @@ function Portfolio() {
         </div>
       </footer>
 
-      {selected && <Modal item={selected} onClose={() => setSelected(null)} />}
+      {selected && <Modal item={selected} lang={lang} S={S} onClose={() => setSelected(null)} />}
     </div>
   );
 }
